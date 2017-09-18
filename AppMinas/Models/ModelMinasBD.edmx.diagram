@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3cfe9a9cd4d1439096545e003b629d8f" Name="Diagram1">
+        <EntityTypeShape EntityType="minasDBModel.Campo" Width="1.5" PointX="6" PointY="9" />
+        <EntityTypeShape EntityType="minasDBModel.Conexion" Width="1.5" PointX="6" PointY="4.25" />
+        <EntityTypeShape EntityType="minasDBModel.Detalle" Width="1.5" PointX="8.25" PointY="2" />
+        <EntityTypeShape EntityType="minasDBModel.Estructura" Width="1.5" PointX="8.25" PointY="5.125" />
+        <EntityTypeShape EntityType="minasDBModel.Formulario" Width="1.5" PointX="0.75" PointY="5" />
+        <EntityTypeShape EntityType="minasDBModel.Formulario1" Width="1.5" PointX="3" PointY="4.125" />
+        <EntityTypeShape EntityType="minasDBModel.Locacion" Width="1.5" PointX="0.75" PointY="8.125" />
+        <EntityTypeShape EntityType="minasDBModel.sysdiagrams" Width="1.5" PointX="8.75" PointY="8.75" />
+        <EntityTypeShape EntityType="minasDBModel.TipoConexion" Width="1.5" PointX="3.75" PointY="1.25" />
+        <EntityTypeShape EntityType="minasDBModel.TipoDato" Width="1.5" PointX="3.75" PointY="9.25" />
+        <EntityTypeShape EntityType="minasDBModel.TipoDetalle" Width="1.5" PointX="6" PointY="1.25" />
+        <EntityTypeShape EntityType="minasDBModel.TipoLocacion" Width="1.5" PointX="1.5" PointY="13.375" />
+        <EntityTypeShape EntityType="minasDBModel.Usuario" Width="1.5" PointX="0.75" PointY="1.625" />
+        <AssociationConnector Association="minasDBModel.FK_CampoEstructura" />
+        <AssociationConnector Association="minasDBModel.PK_TipoDatoCampo" />
+        <AssociationConnector Association="minasDBModel.FK_ConexionEstructura" />
+        <AssociationConnector Association="minasDBModel.FK_FormularioConexion" />
+        <AssociationConnector Association="minasDBModel.FK_FormularioDetalle" />
+        <AssociationConnector Association="minasDBModel.FK_TipoConexion" />
+        <AssociationConnector Association="minasDBModel.FK_TipoDetalle" />
+        <AssociationConnector Association="minasDBModel.FK_FormularioFormulario1" />
+        <AssociationConnector Association="minasDBModel.FK_LocacionFormulario1" />
+        <AssociationConnector Association="minasDBModel.FK_UsuarioFormulario1" />
+        <AssociationConnector Association="minasDBModel.FK_TipoLocacion" />
+        <EntityTypeShape EntityType="minasDBModel.F85bRuQAxMs" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="minasDBModel.FO2nIAoXvBZ" Width="1.5" PointX="11.375" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
