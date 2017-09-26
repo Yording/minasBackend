@@ -205,6 +205,11 @@ namespace AppMinas.Controllers
                                         if (!BandIDColumn)
                                         {
                                             columnasStringsNames.Add("ID");
+                                            columnasStringsNames.Add("Title");
+                                            columnasStringsNames.Add("CreatedOn");
+                                            columnasStringsNames.Add("UpdatedOn");
+                                            columnasStringsNames.Add("UserName");
+
                                             BandIDColumn = true;
                                         }
 
@@ -242,7 +247,7 @@ namespace AppMinas.Controllers
                                     j++;
                                 };
 
-                                if (Datos.Count > 1) // siempre seteo el id sin importar 
+                                if (Datos.Count > 5) // Datos minimos por formulario
                                 {
                                     DatosColumnas.Add(Datos);
                                 }

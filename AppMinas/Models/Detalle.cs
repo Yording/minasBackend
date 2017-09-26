@@ -18,6 +18,10 @@ namespace AppMinas.Models
         public int idConexion { get; set; }
         public string urlDetalle { get; set; }
         public int idTipoDetalle { get; set; }
+        public string idActividad { get; set; }
+        public string descripcion { get; set; }
+        public string nombreActividad { get; set; }
+        public Nullable<System.DateTime> fechaCreacion { get; set; }
     
         public virtual Conexion Conexion { get; set; }
         public virtual TipoDetalle TipoDetalle { get; set; }

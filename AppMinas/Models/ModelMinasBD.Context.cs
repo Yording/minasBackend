@@ -31,6 +31,7 @@ namespace AppMinas.Models
         public virtual DbSet<Conexion> Conexion { get; set; }
         public virtual DbSet<Detalle> Detalle { get; set; }
         public virtual DbSet<Estructura> Estructura { get; set; }
+        public virtual DbSet<FO2nIAoXvBZ> FO2nIAoXvBZ { get; set; }
         public virtual DbSet<Formulario> Formulario { get; set; }
         public virtual DbSet<Formulario1> Formulario1 { get; set; }
         public virtual DbSet<Locacion> Locacion { get; set; }
@@ -60,6 +61,35 @@ namespace AppMinas.Models
                 new ObjectParameter("Obligatorio", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddColumna", nombreTablaParameter, nombreColumnaParameter, tipoColumnaParameter, obligatorioParameter);
+        }
+    
+        public virtual int AddMedia(Nullable<int> idConexion, string urlDetalle, Nullable<int> idTipoDetalle, Nullable<int> idActividad, string descripcion, string nombreActividad)
+        {
+            var idConexionParameter = idConexion.HasValue ?
+                new ObjectParameter("idConexion", idConexion) :
+                new ObjectParameter("idConexion", typeof(int));
+    
+            var urlDetalleParameter = urlDetalle != null ?
+                new ObjectParameter("UrlDetalle", urlDetalle) :
+                new ObjectParameter("UrlDetalle", typeof(string));
+    
+            var idTipoDetalleParameter = idTipoDetalle.HasValue ?
+                new ObjectParameter("idTipoDetalle", idTipoDetalle) :
+                new ObjectParameter("idTipoDetalle", typeof(int));
+    
+            var idActividadParameter = idActividad.HasValue ?
+                new ObjectParameter("idActividad", idActividad) :
+                new ObjectParameter("idActividad", typeof(int));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("descripcion", descripcion) :
+                new ObjectParameter("descripcion", typeof(string));
+    
+            var nombreActividadParameter = nombreActividad != null ?
+                new ObjectParameter("NombreActividad", nombreActividad) :
+                new ObjectParameter("NombreActividad", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddMedia", idConexionParameter, urlDetalleParameter, idTipoDetalleParameter, idActividadParameter, descripcionParameter, nombreActividadParameter);
         }
     
         public virtual int AddRegistro(string nombreTabla, string values, string columns)

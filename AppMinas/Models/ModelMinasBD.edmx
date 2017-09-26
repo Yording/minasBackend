@@ -37,6 +37,10 @@
           <Property Name="idConexion" Type="int" Nullable="false" />
           <Property Name="urlDetalle" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="idTipoDetalle" Type="int" Nullable="false" />
+          <Property Name="idActividad" Type="varchar(max)" />
+          <Property Name="descripcion" Type="varchar(max)" />
+          <Property Name="nombreActividad" Type="varchar" MaxLength="50" />
+          <Property Name="fechaCreacion" Type="date" />
         </EntityType>
         <EntityType Name="Estructura">
           <Key>
@@ -45,6 +49,33 @@
           <Property Name="idEstructura" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idConexion" Type="int" Nullable="false" />
           <Property Name="idCampo" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FO2nIAoXvBZ">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="varchar(max)" />
+          <Property Name="UBIPUEST" Type="varchar(max)" />
+          <Property Name="FECHINS" Type="varchar(max)" />
+          <Property Name="FECHINSPE" Type="varchar(max)" />
+          <Property Name="Funcion" Type="varchar(max)" />
+          <Property Name="OBS" Type="varchar(max)" />
+          <Property Name="ALERTA" Type="varchar(max)" />
+          <Property Name="Observaciones" Type="varchar(max)" />
+          <Property Name="INGSALI" Type="varchar(max)" />
+          <Property Name="OBS1" Type="varchar(max)" />
+          <Property Name="PRO" Type="varchar(max)" />
+          <Property Name="OBS3" Type="varchar(max)" />
+          <Property Name="ESTARMA" Type="varchar(max)" />
+          <Property Name="MUNICION" Type="varchar(max)" />
+          <Property Name="CortedeCabello" Type="varchar(max)" />
+          <Property Name="AFEITADA" Type="varchar(max)" />
+          <Property Name="UNIFORME" Type="varchar(max)" />
+          <Property Name="OBSE" Type="varchar(max)" />
+          <Property Name="FOTOINSP" Type="varchar(max)" />
+          <Property Name="FIRMAGUARDA" Type="varchar(max)" />
+          <Property Name="FIRMAINSP" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Formulario">
           <Key>
@@ -279,6 +310,14 @@
           <Parameter Name="TipoColumna" Type="varchar" Mode="In" />
           <Parameter Name="Obligatorio" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AddMedia" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idConexion" Type="int" Mode="In" />
+          <Parameter Name="UrlDetalle" Type="varchar" Mode="In" />
+          <Parameter Name="idTipoDetalle" Type="int" Mode="In" />
+          <Parameter Name="idActividad" Type="int" Mode="In" />
+          <Parameter Name="descripcion" Type="varchar(max)" Mode="In" />
+          <Parameter Name="NombreActividad" Type="varchar" Mode="In" />
+        </Function>
         <Function Name="AddRegistro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Values" Type="nvarchar(max)" Mode="In" />
@@ -304,7 +343,7 @@
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
         </Function>
         <Function Name="CrearTabla" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
+          <Parameter Name="NombreTabla" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="Prueba" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -359,6 +398,7 @@
           <EntitySet Name="Conexion" EntityType="Self.Conexion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Detalle" EntityType="Self.Detalle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Estructura" EntityType="Self.Estructura" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FO2nIAoXvBZ" EntityType="Self.FO2nIAoXvBZ" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Formulario" EntityType="Self.Formulario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Formulario1" EntityType="Self.Formulario1" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Locacion" EntityType="Self.Locacion" Schema="dbo" store:Type="Tables" />
@@ -422,6 +462,7 @@
           <EntitySet Name="Conexion" EntityType="minasDBModel.Conexion" />
           <EntitySet Name="Detalle" EntityType="minasDBModel.Detalle" />
           <EntitySet Name="Estructura" EntityType="minasDBModel.Estructura" />
+          <EntitySet Name="FO2nIAoXvBZ" EntityType="minasDBModel.FO2nIAoXvBZ" />
           <EntitySet Name="Formulario" EntityType="minasDBModel.Formulario" />
           <EntitySet Name="Formulario1" EntityType="minasDBModel.Formulario1" />
           <EntitySet Name="Locacion" EntityType="minasDBModel.Locacion" />
@@ -480,6 +521,14 @@
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
             <Parameter Name="TipoColumna" Mode="In" Type="String" />
             <Parameter Name="Obligatorio" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddMedia">
+            <Parameter Name="idConexion" Mode="In" Type="Int32" />
+            <Parameter Name="UrlDetalle" Mode="In" Type="String" />
+            <Parameter Name="idTipoDetalle" Mode="In" Type="Int32" />
+            <Parameter Name="idActividad" Mode="In" Type="Int32" />
+            <Parameter Name="descripcion" Mode="In" Type="String" />
+            <Parameter Name="NombreActividad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddRegistro">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
@@ -594,6 +643,10 @@
           <Property Name="idConexion" Type="Int32" Nullable="false" />
           <Property Name="urlDetalle" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="idTipoDetalle" Type="Int32" Nullable="false" />
+          <Property Name="idActividad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="nombreActividad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fechaCreacion" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Conexion" Relationship="minasDBModel.FK_FormularioDetalle" FromRole="Detalle" ToRole="Conexion" />
           <NavigationProperty Name="TipoDetalle" Relationship="minasDBModel.FK_TipoDetalle" FromRole="Detalle" ToRole="TipoDetalle" />
         </EntityType>
@@ -606,6 +659,33 @@
           <Property Name="idCampo" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Campo" Relationship="minasDBModel.FK_CampoEstructura" FromRole="Estructura" ToRole="Campo" />
           <NavigationProperty Name="Conexion" Relationship="minasDBModel.FK_ConexionEstructura" FromRole="Estructura" ToRole="Conexion" />
+        </EntityType>
+        <EntityType Name="FO2nIAoXvBZ">
+          <Key>
+            <PropertyRef Name="Codigo" />
+          </Key>
+          <Property Name="Codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UBIPUEST" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FECHINS" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FECHINSPE" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Funcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OBS" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ALERTA" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Observaciones" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="INGSALI" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OBS1" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PRO" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OBS3" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ESTARMA" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MUNICION" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CortedeCabello" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AFEITADA" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UNIFORME" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="OBSE" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FOTOINSP" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FIRMAGUARDA" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FIRMAINSP" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Formulario">
           <Key>
@@ -923,6 +1003,10 @@
           <EntitySetMapping Name="Detalle">
             <EntityTypeMapping TypeName="minasDBModel.Detalle">
               <MappingFragment StoreEntitySet="Detalle">
+                <ScalarProperty Name="fechaCreacion" ColumnName="fechaCreacion" />
+                <ScalarProperty Name="nombreActividad" ColumnName="nombreActividad" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="idActividad" ColumnName="idActividad" />
                 <ScalarProperty Name="idTipoDetalle" ColumnName="idTipoDetalle" />
                 <ScalarProperty Name="urlDetalle" ColumnName="urlDetalle" />
                 <ScalarProperty Name="idConexion" ColumnName="idConexion" />
@@ -936,6 +1020,34 @@
                 <ScalarProperty Name="idCampo" ColumnName="idCampo" />
                 <ScalarProperty Name="idConexion" ColumnName="idConexion" />
                 <ScalarProperty Name="idEstructura" ColumnName="idEstructura" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FO2nIAoXvBZ">
+            <EntityTypeMapping TypeName="minasDBModel.FO2nIAoXvBZ">
+              <MappingFragment StoreEntitySet="FO2nIAoXvBZ">
+                <ScalarProperty Name="FIRMAINSP" ColumnName="FIRMAINSP" />
+                <ScalarProperty Name="FIRMAGUARDA" ColumnName="FIRMAGUARDA" />
+                <ScalarProperty Name="FOTOINSP" ColumnName="FOTOINSP" />
+                <ScalarProperty Name="OBSE" ColumnName="OBSE" />
+                <ScalarProperty Name="UNIFORME" ColumnName="UNIFORME" />
+                <ScalarProperty Name="AFEITADA" ColumnName="AFEITADA" />
+                <ScalarProperty Name="CortedeCabello" ColumnName="CortedeCabello" />
+                <ScalarProperty Name="MUNICION" ColumnName="MUNICION" />
+                <ScalarProperty Name="ESTARMA" ColumnName="ESTARMA" />
+                <ScalarProperty Name="OBS3" ColumnName="OBS3" />
+                <ScalarProperty Name="PRO" ColumnName="PRO" />
+                <ScalarProperty Name="OBS1" ColumnName="OBS1" />
+                <ScalarProperty Name="INGSALI" ColumnName="INGSALI" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="ALERTA" ColumnName="ALERTA" />
+                <ScalarProperty Name="OBS" ColumnName="OBS" />
+                <ScalarProperty Name="Funcion" ColumnName="Funcion" />
+                <ScalarProperty Name="FECHINSPE" ColumnName="FECHINSPE" />
+                <ScalarProperty Name="FECHINS" ColumnName="FECHINS" />
+                <ScalarProperty Name="UBIPUEST" ColumnName="UBIPUEST" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1044,6 +1156,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddColumna" FunctionName="minasDBModel.Store.AddColumna" />
+          <FunctionImportMapping FunctionImportName="AddMedia" FunctionName="minasDBModel.Store.AddMedia" />
           <FunctionImportMapping FunctionImportName="AddRegistro" FunctionName="minasDBModel.Store.AddRegistro" />
           <FunctionImportMapping FunctionImportName="AddRegla" FunctionName="minasDBModel.Store.AddRegla" />
           <FunctionImportMapping FunctionImportName="ChangeNameColumn" FunctionName="minasDBModel.Store.ChangeNameColumn" />
