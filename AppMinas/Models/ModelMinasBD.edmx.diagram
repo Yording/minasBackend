@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="3cfe9a9cd4d1439096545e003b629d8f" Name="Diagram1">
+      <Diagram DiagramId="3cfe9a9cd4d1439096545e003b629d8f" Name="Diagram1" ZoomLevel="88">
         <EntityTypeShape EntityType="minasDBModel.F85bRuQAxMs" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="minasDBModel.FO2nIAoXvBZ" Width="1.5" PointX="11.375" PointY="6.75" />
         <EntityTypeShape EntityType="minasDBModel.Campo" Width="1.5" PointX="6" PointY="10.125" />

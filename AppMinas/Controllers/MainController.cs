@@ -143,20 +143,22 @@ namespace AppMinas.Controllers
                     // Se obtiene la lista con todas las actividades de la api
                     List<Activity> activiesVicitrack = JsonConvert.DeserializeObject<List<Activity>>(activityService.getActivity());
 
-                    int i = 0;
-                    int j = 0;
+                    int i = 0; // Actividades
+                    int j = 0; //Campos de Actividades
                     string FormGuid = "";
                     bool BandIDColumn = false;
                     ArrayList columnasStringsNames = new ArrayList();
                     ArrayList columnasDetalleNames = new ArrayList();
 
                     //ArrayList Datos = new ArrayList(); // en este array almaceno los datos individuales
-                    ArrayList DatosColumnas = new ArrayList(); // en este arra meto todos los Formularios que se encuentran en Datos
+                    ArrayList DatosColumnas = new ArrayList(); // en este array meto todos los Formularios que se encuentran en Datos
+                    ArrayList DatosColumnasActualizar = new ArrayList(); // en este array meto todos los Formularios que se encuentran en Datos donde se encuentre la validacion para actualizar
                     ArrayList DatosDetalles = new ArrayList();
 
                     string TableName = "";
                     string ColumnaActividadExiste = "ID";
                     bool Existe = false;
+                    bool Actualizar = false;
 
                     //Validar si existen conexiones
                     if (connectionsForms.Count > 0)
@@ -171,46 +173,89 @@ namespace AppMinas.Controllers
                             {
                                 j = 0;
                                 ArrayList Datos = new ArrayList();
-                                foreach(var value in activiesDetailVicitrack.Values)
+                                ArrayList DatosActualizar = new ArrayList();
+                                foreach (var value in activiesDetailVicitrack.Values)
                                 {
-                                    FormGuid = activiesDetailVicitrack.FormGUID;
-                                    TableName = "F" + FormGuid;
+                                   
+                                   if (j == 0)
+                                    {
+                                        //Solo vamos a entrar en este fragmento de codigo en el primer recorrido de datos de cada actividad
+                                        FormGuid = activiesDetailVicitrack.FormGUID;
+                                        TableName = "F" + FormGuid;
 
-                                    if (!RegistroExiste(TableName, ColumnaActividadExiste, activiesDetailVicitrack.ID.ToString()))
-                                    {
-                                        Existe = false;
-                                    }
-                                    else
-                                    {
-                                        if (i != 0)
+
+                                        if (!RegistroExiste(TableName, ColumnaActividadExiste, activiesDetailVicitrack.ID.ToString()))
                                         {
+                                            Existe = false;
+                                        }
+                                        else
+                                        {
+                                            Existe = true;
+                                            //Existe el registro inv
 
-                                            break;
+                                            if (ValidarRegistroActualizar(TableName, activiesDetailVicitrack.UpdatedOn.ToString(), activiesDetailVicitrack.ID.ToString()))
+                                            {
+                                               Actualizar = true;
+
+                                            }
+                                            else
+                                            {
+                                                Actualizar = false;
+                                            }
+
+                                            //Cierre inv
+
+                                           /* if (i != 0)
+                                            {
+                                             
+                                                break;
+                                            }*/
+
+                                            
+                                        }
+
+                                     
+
+                                        //Si es valido para actualizar, modifica el dato
+                                        if (Actualizar) {
+                                            DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.ID.ToString()));
+                                            DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.Title.ToString()));
+                                            DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.LocationName.ToString()));
+                                            DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.LocationGUID.ToString()));
+                                            DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.UpdatedOn.ToString()));
+                                            DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.UpdatedOn.ToString()));
+                                            DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.UserName.ToString()));
+                                        }
+                                        else {
+                                            Datos.Add(ConfigurarDato(activiesDetailVicitrack.ID.ToString()));
+                                            Datos.Add(ConfigurarDato(activiesDetailVicitrack.Title.ToString()));
+                                            Datos.Add(ConfigurarDato(activiesDetailVicitrack.LocationName.ToString()));
+                                            Datos.Add(ConfigurarDato(activiesDetailVicitrack.LocationGUID.ToString()));
+                                            Datos.Add(ConfigurarDato(activiesDetailVicitrack.CreatedOn.ToString()));
+                                            Datos.Add(ConfigurarDato(activiesDetailVicitrack.UpdatedOn.ToString()));
+                                            Datos.Add(ConfigurarDato(activiesDetailVicitrack.UserName.ToString()));
 
                                         }
-                                        Existe = true;
+                                        
+                                      
                                     }
 
-
-
-                                    if (j == 0)
-                                    {
-
-                                        Datos.Add(activiesDetailVicitrack.ID);
-                                    }
-
-                                    //Obtener la estructura de los formulario
+                                    //Obtener la estructura de los formulario solo en la primera actividad
                                     if (i == 0)
                                     {
                                         if (!BandIDColumn)
                                         {
                                             columnasStringsNames.Add("ID");
                                             columnasStringsNames.Add("Title");
+                                            columnasStringsNames.Add("LocationName");
+                                            columnasStringsNames.Add("LocationGUID");
                                             columnasStringsNames.Add("CreatedOn");
                                             columnasStringsNames.Add("UpdatedOn");
                                             columnasStringsNames.Add("UserName");
 
                                             BandIDColumn = true;
+
+                                 
                                         }
 
 
@@ -241,32 +286,68 @@ namespace AppMinas.Controllers
                                             Datos.Add(ConfigurarDato(value.Value.ToString()));
                                         }
                                     }
+                                    else {
 
+                                        // Si existe el registro y se tiene que actualizar
+                                        if (Actualizar) {
+
+                                            if (value.Value.GetType().ToString() != "Newtonsoft.Json.Linq.JArray")
+                                            {
+                                                DatosActualizar.Add(ConfigurarDato(value.Value.ToString()));
+                                            }
+
+                                        }
+                                    }
 
                                     //Fin obtener esquema de formulario
                                     j++;
                                 };
 
-                                if (Datos.Count > 5) // Datos minimos por formulario
+                                if (Datos.Count > 7) // Datos minimos por formulario 
                                 {
                                     DatosColumnas.Add(Datos);
                                 }
+
+                                if (DatosActualizar.Count > 7) // Datos minimos por formulario (Activdad existente)
+                                {
+                                    DatosColumnasActualizar.Add(DatosActualizar);
+                                }
+
                                 i++;
                             }
                         };// fin de recorrer las actividades
                     }
 
-
-                    if (columnasStringsNames.Count > 0)
+                    //Insertar
+                    if (columnasStringsNames.Count > 0 && DatosColumnas.Count>0)
                     {
+
+                        // Primer parametro es el tipo tabla en este caso es un Formulario "1"
                         bool TablaFormulario = CrearTabla(1, TableName, columnasStringsNames);
 
                         if (TablaFormulario)
                         {
-                            insertarFormularios(TableName, columnasStringsNames, DatosColumnas);
+                            InsertarFormularios(TableName, columnasStringsNames, DatosColumnas);
                         }
 
                     }
+
+                    //Actualizar
+                    if (columnasStringsNames.Count > 0 && DatosColumnasActualizar.Count > 0)
+                    {
+
+
+                        bool TablaFormulario = CrearTabla(1, TableName, columnasStringsNames);
+
+                        if (TablaFormulario)
+                        {
+                            ModificarActividades(TableName, columnasStringsNames, DatosColumnasActualizar);
+                        }
+
+                    }
+
+
+
 
                     /*
                     if (columnasDetalleNames.Count > 0)
@@ -286,11 +367,18 @@ namespace AppMinas.Controllers
 
         }
 
-        public string concatenarColumnasStrings(ArrayList columnas)
+        public string ConcatenarColumnasStrings(ArrayList columnas)
         {
 
             return String.Join(",", columnas.ToArray());
         }
+
+        public string ConcatenarDatosActualizarStrings(ArrayList Datos)
+        {
+
+            return String.Join("¬", Datos.ToArray());
+        }
+
         public bool RegistroExiste(string NombreTabla, string ColumnaTabla, string Dato)
         {
             using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
@@ -312,11 +400,33 @@ namespace AppMinas.Controllers
             }
         }
 
-        public string concatenarDatos(ArrayList Datos)
+        public bool ValidarRegistroActualizar(string NombreTabla, string UpdateOn, string idActividad)
+        {
+            using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
+            {
+
+                List<Models.TablaExiste_Result> TablaExiste = objMINASBDEntities.TablaExiste(NombreTabla).ToList();
+
+                if (TablaExiste.Count > 0)
+                {
+                    var Existe = objMINASBDEntities.ValidarRegistroActualizar(NombreTabla, ConfigurarDato(UpdateOn), ConfigurarDato(idActividad)).ToList();
+                    if (Existe[0].Value > 0)
+                    {
+                        return true;
+                    }
+                }
+
+
+                return false;
+            }
+        }
+
+        public string ConcatenarDatos(ArrayList Datos)
         {
             return String.Join("-", Datos.ToArray());
         }
-        public bool insertarFormularios(string NombreTabla, ArrayList Columnas, ArrayList Values)
+
+        public bool InsertarFormularios(string NombreTabla, ArrayList Columnas, ArrayList Values)
         {
 
             using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
@@ -325,13 +435,31 @@ namespace AppMinas.Controllers
                 foreach (ArrayList PaqueteDatos in Values)
                 {
 
-                    objMINASBDEntities.AddRegistro(NombreTabla, concatenarColumnasStrings(PaqueteDatos), concatenarColumnasStrings(Columnas));
+                    objMINASBDEntities.AddRegistro(NombreTabla, ConcatenarColumnasStrings(PaqueteDatos), ConcatenarColumnasStrings(Columnas));
 
                 }
 
 
 
 
+            }
+
+            return true;
+        }
+
+        public bool ModificarActividades(string NombreTabla, ArrayList Columnas, ArrayList Datos)
+        {
+
+            using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
+            {
+
+                foreach (ArrayList DatosmodificarBD in Datos)
+                {
+
+                    objMINASBDEntities.UpdateRegistro(NombreTabla, ConcatenarColumnasStrings(ConfigurarDatoModificar(DatosmodificarBD, Columnas)), ConcatenarDatosActualizarStrings(DatosmodificarBD).Split('¬')[0]);
+
+                }
+              
             }
 
             return true;
@@ -360,7 +488,7 @@ namespace AppMinas.Controllers
                     string tipoDato = "VARCHAR(MAX)";
                     string nulidad = "NULL";
 
-                    foreach (var Columns in concatenarColumnasStrings(Columnas).Split(','))
+                    foreach (var Columns in ConcatenarColumnasStrings(Columnas).Split(','))
                     {
 
                         objMINASBDEntities.AddColumna(NombreTabla, Columns, tipoDato, nulidad);
@@ -375,7 +503,7 @@ namespace AppMinas.Controllers
                     string tipoDato = "VARCHAR(MAX)";
                     string nulidad = "NULL";
 
-                    foreach (var Columns in concatenarColumnasStrings(Columnas).Split(','))
+                    foreach (var Columns in ConcatenarColumnasStrings(Columnas).Split(','))
                     {
                         List<Models.ColumnaExiste_Result> LstColumna = objMINASBDEntities.ColumnaExiste(NombreTabla, Columns).ToList();
                         if (LstColumna.Count == 0)
@@ -396,7 +524,7 @@ namespace AppMinas.Controllers
         {
 
             int iterador = 1;
-            foreach (var ColumnaLista in concatenarColumnasStrings(ListaColumnas).Split(','))
+            foreach (var ColumnaLista in ConcatenarColumnasStrings(ListaColumnas).Split(','))
             {
 
                 if (ColumnaLista == Columna || ColumnaLista.Equals(Columna))
@@ -417,7 +545,7 @@ namespace AppMinas.Controllers
             return Columna.Replace(" ", "");
         }
 
-        public ArrayList columnsNamesDetail(object detail)
+        public ArrayList ColumnsNamesDetail(object detail)
         {
             ArrayList columnsNames = new ArrayList();
             ArrayList rows = new ArrayList();
@@ -487,6 +615,25 @@ namespace AppMinas.Controllers
 
         }
 
+        public ArrayList ConfigurarDatoModificar(ArrayList Datos, ArrayList Columnas)
+        {
+            ArrayList DatosModificar = new ArrayList();
+            string DatoConfiguradoModificar = "";
+            int i = 0;
+            string[] Values = ConcatenarDatosActualizarStrings(Datos).Split('¬');
+            foreach (var ColumnName in Columnas)
+            { 
+                DatoConfiguradoModificar += ColumnName + "=" + Values[i];
+
+                DatosModificar.Add(DatoConfiguradoModificar);
+                DatoConfiguradoModificar = "";
+                i++;
+            }
+
+
+            return DatosModificar;
+
+        }
 
         public bool get()
         {
@@ -498,3 +645,137 @@ namespace AppMinas.Controllers
 
     }
 }
+
+/* 
+ 
+     Respaldo
+
+
+
+     foreach (Activity ele in activiesVicitrack)
+                        {
+                            DetailActivity activiesDetailVicitrack = JsonConvert.DeserializeObject<DetailActivity>(activityService.getDetailActivity(ele.GUID));
+                            ResponseModel responseFindForm = JsonConvert.DeserializeObject<ResponseModel>(connectionService.findConnectionGUIDForms(activiesDetailVicitrack.FormGUID));
+
+                            if (responseFindForm.value.ToString() != "[]")
+                            {
+                                j = 0;
+                                ArrayList Datos = new ArrayList();
+                                foreach(var value in activiesDetailVicitrack.Values)
+                                {
+                                    FormGuid = activiesDetailVicitrack.FormGUID;
+                                    TableName = "F" + FormGuid;
+
+                                    if (!RegistroExiste(TableName, ColumnaActividadExiste, activiesDetailVicitrack.ID.ToString()))
+                                    {
+                                        Existe = false;
+                                    }
+                                    else
+                                    {
+                                        //Existe el registro inv
+
+                                        if (ValidarRegistroActualizar(TableName, activiesDetailVicitrack.UpdatedOn.ToString(), activiesDetailVicitrack.ID.ToString()) && )
+                                        {
+
+
+
+                                        }
+                                        else {
+                                            Actualizar = false;
+                                        }
+
+
+
+
+
+
+                                        //Cierre inv
+
+
+
+
+                                        if (i != 0)
+                                        {
+                                            //Codigo para extaer las cadenas de actualización
+                                            break;
+                                        }
+
+                                        Existe = true;
+                                    }
+
+
+
+                                    if (j == 0)
+                                    {
+
+                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.ID.ToString()));                                  
+                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.Title.ToString()));
+                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.LocationName.ToString()));
+                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.LocationGUID.ToString()));
+                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.CreatedOn.ToString()));
+                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.UpdatedOn.ToString()));
+                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.UserName.ToString()));
+                                      
+                                    }
+
+                                    //Obtener la estructura de los formulario
+                                    if (i == 0)
+                                    {
+                                        if (!BandIDColumn)
+                                        {
+                                            columnasStringsNames.Add("ID");
+                                            columnasStringsNames.Add("Title");
+                                            columnasStringsNames.Add("LocationName");
+                                            columnasStringsNames.Add("LocationGUID");
+                                            columnasStringsNames.Add("CreatedOn");
+                                            columnasStringsNames.Add("UpdatedOn");
+                                            columnasStringsNames.Add("UserName");
+
+                                            BandIDColumn = true;
+
+                                 
+                                        }
+
+
+
+                                        if (value.Value.GetType().ToString() == "Newtonsoft.Json.Linq.JArray")
+                                        {
+                                            string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
+                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, columnasDetalleNames);
+                                            columnasDetalleNames.Add(ColumnIndividual);
+                                        }
+                                        else
+                                        {
+                                            string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
+                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, columnasStringsNames);
+                                            columnasStringsNames.Add(ColumnIndividual);
+                                        }
+
+                                    }
+
+
+                                    //Obtengo los datos de las columnas
+
+
+                                    if (!Existe)
+                                    {
+                                        if (value.Value.GetType().ToString() != "Newtonsoft.Json.Linq.JArray")
+                                        {
+                                            Datos.Add(ConfigurarDato(value.Value.ToString()));
+                                        }
+                                    }
+
+
+                                    //Fin obtener esquema de formulario
+                                    j++;
+                                };
+
+                                if (Datos.Count > 7) // Datos minimos por formulario
+                                {
+                                    DatosColumnas.Add(Datos);
+                                }
+                                i++;
+                            }
+                        };// fin de recorrer las actividades
+     
+     */

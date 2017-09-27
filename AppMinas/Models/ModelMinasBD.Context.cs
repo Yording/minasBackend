@@ -340,5 +340,39 @@ namespace AppMinas.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("TablasConsulta", nombreTablaParameter);
         }
+    
+        public virtual ObjectResult<Nullable<int>> ValidarRegistroActualizar(string nombreTabla, string updateOn, string idActividad)
+        {
+            var nombreTablaParameter = nombreTabla != null ?
+                new ObjectParameter("NombreTabla", nombreTabla) :
+                new ObjectParameter("NombreTabla", typeof(string));
+    
+            var updateOnParameter = updateOn != null ?
+                new ObjectParameter("UpdateOn", updateOn) :
+                new ObjectParameter("UpdateOn", typeof(string));
+    
+            var idActividadParameter = idActividad != null ?
+                new ObjectParameter("IdActividad", idActividad) :
+                new ObjectParameter("IdActividad", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ValidarRegistroActualizar", nombreTablaParameter, updateOnParameter, idActividadParameter);
+        }
+    
+        public virtual int UpdateRegistro(string nombreTabla, string script, string idActividad)
+        {
+            var nombreTablaParameter = nombreTabla != null ?
+                new ObjectParameter("NombreTabla", nombreTabla) :
+                new ObjectParameter("NombreTabla", typeof(string));
+    
+            var scriptParameter = script != null ?
+                new ObjectParameter("script", script) :
+                new ObjectParameter("script", typeof(string));
+    
+            var idActividadParameter = idActividad != null ?
+                new ObjectParameter("IdActividad", idActividad) :
+                new ObjectParameter("IdActividad", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateRegistro", nombreTablaParameter, scriptParameter, idActividadParameter);
+        }
     }
 }

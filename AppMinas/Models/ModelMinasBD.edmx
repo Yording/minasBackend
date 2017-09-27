@@ -56,6 +56,12 @@
           </Key>
           <Property Name="Codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ID" Type="varchar(max)" />
+          <Property Name="Title" Type="varchar(max)" />
+          <Property Name="LocationName" Type="varchar(max)" />
+          <Property Name="LocationGUID" Type="varchar(max)" />
+          <Property Name="CreatedOn" Type="varchar(max)" />
+          <Property Name="UpdatedOn" Type="varchar(max)" />
+          <Property Name="UserName" Type="varchar(max)" />
           <Property Name="UBIPUEST" Type="varchar(max)" />
           <Property Name="FECHINS" Type="varchar(max)" />
           <Property Name="FECHINSPE" Type="varchar(max)" />
@@ -393,6 +399,16 @@
         <Function Name="TablasConsulta" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="UpdateRegistro" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NombreTabla" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="script" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="IdActividad" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="ValidarRegistroActualizar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NombreTabla" Type="nvarchar" Mode="In" />
+          <Parameter Name="UpdateOn" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdActividad" Type="nvarchar" Mode="In" />
+        </Function>
         <EntityContainer Name="minasDBModelStoreContainer">
           <EntitySet Name="Campo" EntityType="Self.Campo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Conexion" EntityType="Self.Conexion" Schema="dbo" store:Type="Tables" />
@@ -555,7 +571,7 @@
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CrearTabla">
-            <Parameter Name="NombreTabla" Mode="In" Type="String" />
+          <Parameter Name="NombreTabla" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Prueba">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
@@ -599,10 +615,20 @@
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <FunctionImport Name="TablaExiste" ReturnType="Collection(minasDBModel.TablaExiste_Result)">
-            <Parameter Name="NombreTabla" Mode="In" Type="String" />
+          <Parameter Name="NombreTabla" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TablasConsulta" ReturnType="Collection(String)">
+          <Parameter Name="NombreTabla" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ValidarRegistroActualizar" ReturnType="Collection(Int32)">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
+            <Parameter Name="UpdateOn" Mode="In" Type="String" />
+            <Parameter Name="IdActividad" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateRegistro">
+            <Parameter Name="NombreTabla" Mode="In" Type="String" />
+            <Parameter Name="script" Mode="In" Type="String" />
+            <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Campo">
@@ -686,6 +712,12 @@
           <Property Name="FOTOINSP" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="FIRMAGUARDA" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="FIRMAINSP" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LocationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LocationGUID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedOn" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Formulario">
           <Key>
@@ -1026,6 +1058,12 @@
           <EntitySetMapping Name="FO2nIAoXvBZ">
             <EntityTypeMapping TypeName="minasDBModel.FO2nIAoXvBZ">
               <MappingFragment StoreEntitySet="FO2nIAoXvBZ">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="LocationGUID" ColumnName="LocationGUID" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="FIRMAINSP" ColumnName="FIRMAINSP" />
                 <ScalarProperty Name="FIRMAGUARDA" ColumnName="FIRMAGUARDA" />
                 <ScalarProperty Name="FOTOINSP" ColumnName="FOTOINSP" />
@@ -1231,6 +1269,8 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="TablasConsulta" FunctionName="minasDBModel.Store.TablasConsulta" />
+          <FunctionImportMapping FunctionImportName="ValidarRegistroActualizar" FunctionName="minasDBModel.Store.ValidarRegistroActualizar" />
+          <FunctionImportMapping FunctionImportName="UpdateRegistro" FunctionName="minasDBModel.Store.UpdateRegistro" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
