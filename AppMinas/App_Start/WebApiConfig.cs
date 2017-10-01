@@ -31,6 +31,7 @@ namespace AppMinas
 
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<Campo>("Campos");
+            builder.EntitySet<Job>("Jobs");
             builder.EntitySet<Conexion>("Conexiones");
             builder.EntitySet<Detalle>("Detalles");
             builder.EntitySet<Estructura>("Estructuras");

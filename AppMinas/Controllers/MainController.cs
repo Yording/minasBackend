@@ -20,6 +20,8 @@ namespace AppMinas.Controllers
         private static HelperService helper;
         private static AuthService authService;
         private static FormService formService;
+        private static UserService userService;
+        private static LocationService locationService;
         private static ActivityService activityService;
         private static ConnectionService connectionService;
         private static string _token = string.Empty;
@@ -37,6 +39,72 @@ namespace AppMinas.Controllers
                 {
                     //tenemos algunos formularios repetidos
                     formService.createForm(ele.GUID, ele.Title);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+        }
+
+        public void insertarUsuarios(List<User> usersVicitrack)
+        {
+            //Invertimos la lista para traer los ultimos usuarios
+            usersVicitrack.Reverse();
+            // Insertar formularios
+            foreach (User ele in usersVicitrack)
+            {
+                // Verificamos si el usuario ya existe en la BD
+                JObject response = JObject.Parse(userService.findUserId(ele.ID));
+                if (response.Value<Newtonsoft.Json.Linq.JToken>("value").Count<JToken>() == 0)
+                {
+                    //tenemos algunos formularios repetidos
+                    userService.createUser(ele.ID, ele.FirstName, ele.LastName);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+        }
+
+        public void insertarLocaciones(List<Location> locationsVicitrack)
+        {
+            //Invertimos la lista para traer los ultimos formularios
+            locationsVicitrack.Reverse();
+            // Insertar formularios
+            foreach (Location ele in locationsVicitrack)
+            {
+                // Verificamos si el formulario ya existe en la BD
+                JObject response = JObject.Parse(formService.findFormGUID(ele.GUID));
+                if (response.Value<Newtonsoft.Json.Linq.JToken>("value").Count<JToken>() == 0)
+                {
+                    //tenemos algunos formularios repetidos
+                    formService.createForm(ele.GUID, ele.Fax);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+        }
+
+        public void insertarTipoLocaciones(List<TypeLocation> typeLocationsVicitrack)
+        {
+            //Invertimos la lista para traer los ultimos formularios
+            typeLocationsVicitrack.Reverse();
+            // Insertar formularios
+            foreach (TypeLocation ele in typeLocationsVicitrack)
+            {
+                // Verificamos si el formulario ya existe en la BD
+                JObject response = JObject.Parse(locationService.findTypeLocationGUID(ele.GUID));
+                if (response.Value<Newtonsoft.Json.Linq.JToken>("value").Count<JToken>() == 0)
+                {
+                    //tenemos algunos formularios repetidos
+                    locationService.createTypeLocation(ele.GUID, ele.Name, ele.IsActive);
                 }
                 else
                 {
@@ -124,20 +192,33 @@ namespace AppMinas.Controllers
                     // Instancias a utlizar
                     activityService = new ActivityService(_token);
                     formService = new FormService(_token);
+                    userService = new UserService(_token);
+                    locationService = new LocationService(_token);
                     connectionService = new ConnectionService();
 
                     // Se Obtiene una lista con todos los formularios alojados en la api
                     List<Form> formsVicitrack = JsonConvert.DeserializeObject<List<Form>>(formService.getForms());
 
+                    // Se Obtiene una lista con todos los usuarios alojados en la api
+                    List<User> usersVicitrack = JsonConvert.DeserializeObject<List<User>>(userService.getUsers());
+
+                    // Se Obtiene una lista con todos las tipo locaciones alojados en la api
+                    List<TypeLocation> typeLocationsVicitrack = JsonConvert.DeserializeObject<List<TypeLocation>>(locationService.getTypeLocations());
+
                     // Obtener las conexiones creadas
                     ResponseModel responseConnections = JsonConvert.DeserializeObject<ResponseModel>(connectionService.getConnectionsForms());
-                    List<ConexionModel> connectionsForms = JsonConvert.DeserializeObject<List<ConexionModel>>(responseConnections.value.ToString());
-
 
                     // Se obtiene una lista con las conexiones creadas en la BD.
+                    List<ConexionModel> connectionsForms = JsonConvert.DeserializeObject<List<ConexionModel>>(responseConnections.value.ToString());
 
-
+                    // Insertamos los formularios de vicitrack a la tabla Formularios
                     insertarFormularios(formsVicitrack);
+
+                    // Insertamos los usuarios de vicitrack a la tabla Usuarios
+                    insertarUsuarios(usersVicitrack);
+
+                    // Insertamos los tipos de locaciones de vicitrack a la tabla TipoLocacion
+                    insertarTipoLocaciones(typeLocationsVicitrack);
 
 
                     // Se obtiene la lista con todas las actividades de la api

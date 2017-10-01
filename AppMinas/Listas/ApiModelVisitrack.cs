@@ -13,6 +13,45 @@ namespace AppMinas.Listas
 
     }
 
+    public class User
+    {
+        public string ID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+    }
+
+    public class Location
+    {
+
+        public string Name { get; set; }
+        public string ContactName { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Fax { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Country { get; set; }
+        public string PostalCode { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public string TagUID { get; set; }
+        public string LocationTypeGUID { get; set; }
+        public string GUID { get; set; }
+        public string UpdatedOn { get; set; }
+    }
+
+
+
+    public class TypeLocation
+    {
+        public string GUID { get; set; }
+        public string Name { get; set; }
+        public bool IsActive { get; set; }
+
+    }
+
     public class Activity
     {
         public string Title { get; set; }

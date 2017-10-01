@@ -31,7 +31,9 @@ namespace AppMinas.Models
         public int periodoSincronizacion { get; set; }
         public string descripcion { get; set; }
         public Nullable<System.DateTime> fechaActualizacion { get; set; }
+        public int idJob { get; set; }
     
+        public virtual Job Job { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Estructura> Estructura { get; set; }
         public virtual Formulario Formulario { get; set; }

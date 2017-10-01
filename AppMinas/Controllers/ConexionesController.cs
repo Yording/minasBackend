@@ -23,6 +23,7 @@ namespace AppMinas.Controllers
     using AppMinas.Models;
     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
     builder.EntitySet<Conexion>("Conexiones");
+    builder.EntitySet<Job>("Job"); 
     builder.EntitySet<Estructura>("Estructura"); 
     builder.EntitySet<Formulario>("Formulario"); 
     builder.EntitySet<Detalle>("Detalle"); 
@@ -149,6 +150,13 @@ namespace AppMinas.Controllers
             await db.SaveChangesAsync();
 
             return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        // GET: odata/Conexiones(5)/Job
+        [EnableQuery]
+        public SingleResult<Job> GetJob([FromODataUri] int key)
+        {
+            return SingleResult.Create(db.Conexion.Where(m => m.idConexion == key).Select(m => m.Job));
         }
 
         // GET: odata/Conexiones(5)/Estructura

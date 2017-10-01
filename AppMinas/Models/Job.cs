@@ -12,20 +12,18 @@ namespace AppMinas.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Usuario
+    public partial class Job
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Usuario()
+        public Job()
         {
-            this.Formulario1 = new HashSet<Formulario1>();
+            this.Conexion = new HashSet<Conexion>();
         }
     
-        public long idUsuario { get; set; }
-        public string GUIDUsuario { get; set; }
+        public int idJob { get; set; }
         public string nombre { get; set; }
-        public string apellido { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Formulario1> Formulario1 { get; set; }
+        public virtual ICollection<Conexion> Conexion { get; set; }
     }
 }

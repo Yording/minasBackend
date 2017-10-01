@@ -37,8 +37,6 @@ namespace AppMinas.Models
         public string FIRMAGUARDA { get; set; }
         public string FIRMAINSP { get; set; }
         public string Title { get; set; }
-        public string LocationName { get; set; }
-        public string LocationGUID { get; set; }
         public string CreatedOn { get; set; }
         public string UpdatedOn { get; set; }
         public string UserName { get; set; }

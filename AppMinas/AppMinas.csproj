@@ -213,15 +213,19 @@
     <Compile Include="Controllers\ConexionesController.cs" />
     <Compile Include="Controllers\DetallesController.cs" />
     <Compile Include="Controllers\FormulariosController.cs" />
+    <Compile Include="Controllers\LocacionesController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\TipoConexionesController.cs" />
     <Compile Include="Controllers\TipoDetallesController.cs" />
+    <Compile Include="Controllers\TipoLocacionesController.cs" />
+    <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Listas\ApiModelVisitrack.cs" />
     <Compile Include="Listas\Data.cs" />
     <Compile Include="Listas\DatosSincronizar.cs" />
+    <Compile Include="Listas\Multimedia.cs" />
     <Compile Include="Listas\Registros.cs" />
     <Compile Include="Listas\Resultado.cs" />
     <Compile Include="Listas\ConexionModel.cs" />
@@ -253,6 +257,9 @@
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Formulario1.cs">
+      <DependentUpon>ModelMinasBD.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Job.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Locacion.cs">
@@ -306,6 +313,8 @@
     <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="Services\FormService.cs" />
     <Compile Include="Services\HelperService.cs" />
+    <Compile Include="Services\LocationService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Utilidades\AzureLoadMedia.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -362,7 +371,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

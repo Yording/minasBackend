@@ -27,7 +27,7 @@ namespace AppMinas.Controllers
 
         }
 
-        public Resultado Post()
+        public Resultado Post(Multimedia multimedia)
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
 
