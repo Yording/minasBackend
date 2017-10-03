@@ -186,6 +186,22 @@ namespace AppMinas.Controllers
                 Token authentication = JsonConvert.DeserializeObject<Token>(authService.getAuthentication());
                 if (authentication.status == "OK")
                 {
+
+
+                    // Ejemplo Diccionario
+                    //Dictionary<string, ArrayList> openWith = new Dictionary<string, ArrayList>();
+
+                    //// Add some elements to the dictionary. There are no 
+                    //// duplicate keys, but some of the values are duplicates.
+                    //openWith.Add("F803DDASD", new ArrayList { 1,2,3} );
+                    //openWith.Add("bmp", new ArrayList { 12, 2, 3 });
+                    //openWith.Add("dib", new ArrayList { 1, 20, 3 });
+                    //openWith.Add("rtf", new ArrayList { 1, 2, 30 });
+
+                    //openWith["rtf"].Add(4);
+                    //ArrayList valor = openWith["rtf"];
+
+
                     // Se obtiene el token de acceso que devolvio la api
                     string _token = authentication.AccessToken;
 
@@ -232,7 +248,20 @@ namespace AppMinas.Controllers
                     ArrayList columnasDetalleNames = new ArrayList();
 
                     //ArrayList Datos = new ArrayList(); // en este array almaceno los datos individuales
-                    ArrayList DatosColumnas = new ArrayList(); // en este array meto todos los Formularios que se encuentran en Datos
+
+                    //TODO----Se agregan diccionarios para controlar varias tablas
+                    // Este diccionario la clave será la nombre de la tabla y valor los registros
+                    Dictionary<string, ArrayList> DictTablasColumnas = new Dictionary<string, ArrayList>();
+                    //Este diccionario sirve para guardar las columnas de cada una de los detalles para cada formulario
+                    Dictionary<string, Dictionary<string, ArrayList>> DictTablasColumnasDetalles = new Dictionary<string, Dictionary<string, ArrayList>>();
+                    //Este diccionario sirve para obtener todas las columnas detalle de un formulario
+                    Dictionary<string, ArrayList> DictTablasColumnasFormulariosDetalles = new Dictionary<string, ArrayList>();
+                    Dictionary<string, ArrayList> DictTablasDatos= new Dictionary<string, ArrayList>();
+                    Dictionary<string, Dictionary<string, ArrayList>> DictTablasDatosDetalles = new Dictionary<string, Dictionary<string, ArrayList>>();
+                    Dictionary<string, ArrayList> DictTablasDatosActualizar = new Dictionary<string, ArrayList>();
+
+                    // TODO----No se requiere estas variables seran reemplazadas por diccionarios
+                    ArrayList DatosColumnas = new ArrayList(); // en este array meto todos los Formularios que se encuentran en Datos 
                     ArrayList DatosColumnasActualizar = new ArrayList(); // en este array meto todos los Formularios que se encuentran en Datos donde se encuentre la validacion para actualizar
                     ArrayList DatosDetalles = new ArrayList();
 
@@ -258,13 +287,26 @@ namespace AppMinas.Controllers
                                 foreach (var value in activiesDetailVicitrack.Values)
                                 {
                                    
+                                    // Si es j==0 va agregar los datos básicos de la actividad a un nuevo registro
                                    if (j == 0)
                                     {
                                         //Solo vamos a entrar en este fragmento de codigo en el primer recorrido de datos de cada actividad
                                         FormGuid = activiesDetailVicitrack.FormGUID;
                                         TableName = "F" + FormGuid;
-
-
+                                       
+                                        // Crea la key con el nombre de la tabla en caso de que la llave aun no exista
+                                        
+                                        if (!DictTablasColumnas.ContainsKey(TableName))
+                                        {
+                                            DictTablasColumnas.Add(TableName, new ArrayList { });
+                                            DictTablasDatos.Add(TableName, new ArrayList { });
+                                            DictTablasDatosActualizar.Add(TableName, new ArrayList { });
+                                            DictTablasColumnasFormulariosDetalles.Add(TableName, new ArrayList { });
+                                            DictTablasColumnasDetalles.Add(TableName, new Dictionary<string, ArrayList> { });
+                                            DictTablasDatosDetalles.Add(TableName, new Dictionary<string, ArrayList> { });
+                                            BandIDColumn = false;
+                                        }
+                                       
                                         if (!RegistroExiste(TableName, ColumnaActividadExiste, activiesDetailVicitrack.ID.ToString()))
                                         {
                                             Existe = false;
@@ -308,6 +350,7 @@ namespace AppMinas.Controllers
                                             DatosActualizar.Add(ConfigurarDato(activiesDetailVicitrack.UserName.ToString()));
                                         }
                                         else {
+
                                             Datos.Add(ConfigurarDato(activiesDetailVicitrack.ID.ToString()));
                                             Datos.Add(ConfigurarDato(activiesDetailVicitrack.Title.ToString()));
                                             Datos.Add(ConfigurarDato(activiesDetailVicitrack.LocationName.ToString()));
@@ -315,6 +358,14 @@ namespace AppMinas.Controllers
                                             Datos.Add(ConfigurarDato(activiesDetailVicitrack.CreatedOn.ToString()));
                                             Datos.Add(ConfigurarDato(activiesDetailVicitrack.UpdatedOn.ToString()));
                                             Datos.Add(ConfigurarDato(activiesDetailVicitrack.UserName.ToString()));
+                                            // TODO-----No requiero el dicttablasdatos es suficiente con arralist datos
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(activiesDetailVicitrack.ID.ToString()));
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(activiesDetailVicitrack.Title.ToString()));
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(activiesDetailVicitrack.LocationName.ToString()));
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(activiesDetailVicitrack.LocationGUID.ToString()));
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(activiesDetailVicitrack.CreatedOn.ToString()));
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(activiesDetailVicitrack.UpdatedOn.ToString()));
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(activiesDetailVicitrack.UserName.ToString()));
 
                                         }
                                         
@@ -322,18 +373,27 @@ namespace AppMinas.Controllers
                                     }
 
                                     //Obtener la estructura de los formulario solo en la primera actividad
-                                    if (i == 0)
+                                    //TODO------Debo controlar solo ingrese un sola vez por formulario, con DictTablasDatos es suficiente con el numero registros igual a 0
+                                    //Todo------Se puede eliminar variable i
+                                    if (DictTablasDatos[TableName].Count == 0)
                                     {
                                         if (!BandIDColumn)
                                         {
-                                            columnasStringsNames.Add("ID");
-                                            columnasStringsNames.Add("Title");
-                                            columnasStringsNames.Add("LocationName");
-                                            columnasStringsNames.Add("LocationGUID");
-                                            columnasStringsNames.Add("CreatedOn");
-                                            columnasStringsNames.Add("UpdatedOn");
-                                            columnasStringsNames.Add("UserName");
-
+                                            //TODO-----Se requiere quitar el arraylist columnasStringsNames
+                                            //columnasStringsNames.Add("ID");
+                                            //columnasStringsNames.Add("Title");
+                                            //columnasStringsNames.Add("LocationName");
+                                            //columnasStringsNames.Add("LocationGUID");
+                                            //columnasStringsNames.Add("CreatedOn");
+                                            //columnasStringsNames.Add("UpdatedOn");
+                                            //columnasStringsNames.Add("UserName");
+                                            DictTablasColumnas[TableName].Add("ID");
+                                            DictTablasColumnas[TableName].Add("Title");
+                                            DictTablasColumnas[TableName].Add("LocationName");
+                                            DictTablasColumnas[TableName].Add("LocationGUID");
+                                            DictTablasColumnas[TableName].Add("CreatedOn");
+                                            DictTablasColumnas[TableName].Add("UpdatedOn");
+                                            DictTablasColumnas[TableName].Add("UserName");
                                             BandIDColumn = true;
 
                                  
@@ -343,28 +403,52 @@ namespace AppMinas.Controllers
 
                                         if (value.Value.GetType().ToString() == "Newtonsoft.Json.Linq.JArray")
                                         {
+                                            
                                             string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
-                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, columnasDetalleNames);
-                                            columnasDetalleNames.Add(ColumnIndividual);
+                                            //TODO------Se elimina el parametro columnasDetalleNames y se agrega DictTablasColumnasDetalles[TableName]
+                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnasFormulariosDetalles[TableName]);
+                                            //columnasDetalleNames.Add(ColumnIndividual); //TODO----Se elimina esta linea
+                                            DictTablasColumnasFormulariosDetalles[TableName].Add(ColumnIndividual);
                                         }
                                         else
                                         {
                                             string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
-                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, columnasStringsNames);
-                                            columnasStringsNames.Add(ColumnIndividual);
+                                            //TODO------Se elimina el parametro columnasStringsNames y se agrega DictTablasColumnas[TableName]
+                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnas[TableName]);
+                                            //columnasStringsNames.Add(ColumnIndividual); //TODO-----Esta linea ya no es necesaria
+                                            DictTablasColumnas[TableName].Add(ColumnIndividual);
                                         }
 
                                     }
 
-
                                     //Obtengo los datos de las columnas
-
-
                                     if (!Existe)
                                     {
                                         if (value.Value.GetType().ToString() != "Newtonsoft.Json.Linq.JArray")
                                         {
                                             Datos.Add(ConfigurarDato(value.Value.ToString()));
+                                            //DictTablasDatos[TableName].Add(ConfigurarDato(value.Value.ToString()));
+                                        }
+                                        else
+                                        {
+                                            if(DictTablasColumnasFormulariosDetalles[TableName].Count != DictTablasColumnasDetalles[TableName].Count)
+                                            {
+                                                string columnaDetalle = EliminarEspacios(value.apiId.ToString());
+                                                ArrayList list = ColumnsNamesDetail(value.Value);
+                                                DictTablasColumnasDetalles[TableName][columnaDetalle].Add(list);
+                                            }
+                                            //TODO-----Necesito validar la mayor cantidad de tablas detalles para los formularios
+                                            //TODO-----Posiblemente llegue la columna vacia y no existe las columnas
+                                            //para el detalle primera pasada posiblemente esa linea se cambie por
+                                            //DictTablasDetalles[TableName+].Add(ColumnIndividual);
+                                            
+                                            
+                                            //TODO-----Debo realizar una validación para cuando lista me devuelve 
+                                            // las columnas de la tabla detalle con un tamaño 0
+                                            //if (list[0].Count>0){
+                                            //}
+
+
                                         }
                                     }
                                     else {
@@ -386,43 +470,63 @@ namespace AppMinas.Controllers
 
                                 if (Datos.Count > 7) // Datos minimos por formulario 
                                 {
-                                    DatosColumnas.Add(Datos);
+                                    DatosColumnas.Add(Datos); //TODO-----Ya no se requiere esta variable
+                                    DictTablasDatos[TableName].Add(Datos);
                                 }
 
                                 if (DatosActualizar.Count > 7) // Datos minimos por formulario (Activdad existente)
                                 {
-                                    DatosColumnasActualizar.Add(DatosActualizar);
+                                    DatosColumnasActualizar.Add(DatosActualizar);//TODO----Ya no se requiere esta variable
+                                    DictTablasDatosActualizar[TableName].Add(DatosActualizar);
                                 }
 
-                                i++;
+                                i++; // TODO----- ya no se requiere esta variable
                             }
                         };// fin de recorrer las actividades
                     }
 
                     //Insertar
-                    if (columnasStringsNames.Count > 0 && DatosColumnas.Count>0)
+                    // TODO---- es necesario cambiar los arrraylist columnasStringsnames y datosColumnas
+                    // por los diccionarios los cuales pueden contener varias tablas
+                    if (DictTablasColumnas.Count > 0 && DictTablasDatos.Count>0)
                     {
-
-                        // Primer parametro es el tipo tabla en este caso es un Formulario "1"
-                        bool TablaFormulario = CrearTabla(1, TableName, columnasStringsNames);
-
-                        if (TablaFormulario)
+                        // TODO-----foreach de todas las tablas a insertar
+                        foreach (KeyValuePair<string, ArrayList> Dato in DictTablasDatos)
                         {
-                            InsertarFormularios(TableName, columnasStringsNames, DatosColumnas);
+                            if (Dato.Value.Count > 0)
+                            {
+                                // Primer parametro es el tipo tabla en este caso es un Formulario "1"
+                                bool TablaFormulario = CrearTabla(Dato.Key, DictTablasColumnas[Dato.Key]);
+
+                                if (TablaFormulario)
+                                {
+                                    InsertarFormularios(Dato.Key, DictTablasColumnas[Dato.Key], Dato.Value);
+                                }
+                            }
                         }
+
+                       
 
                     }
 
                     //Actualizar
-                    if (columnasStringsNames.Count > 0 && DatosColumnasActualizar.Count > 0)
+                    // TODO---- es necesario cambiar los arrraylist columnasStringsnames y datosColumnas
+                    // por los diccionarios los cuales pueden contener varias tablas
+                    if (DictTablasColumnas.Count > 0 && DictTablasDatosActualizar.Count > 0)
                     {
-
-
-                        bool TablaFormulario = CrearTabla(1, TableName, columnasStringsNames);
-
-                        if (TablaFormulario)
+                        // TODO-----foreach de todas las tablas a actualizar
+                        foreach (KeyValuePair<string, ArrayList> Dato in DictTablasDatosActualizar)
                         {
-                            ModificarActividades(TableName, columnasStringsNames, DatosColumnasActualizar);
+                            if (Dato.Value.Count > 0)
+                            {
+                                // Primer parametro es el tipo tabla en este caso es un Formulario "1"
+                                bool TablaFormulario = CrearTabla(Dato.Key, DictTablasColumnas[Dato.Key]);
+
+                                if (TablaFormulario)
+                                {
+                                    ModificarActividades(Dato.Key, DictTablasColumnas[Dato.Key], Dato.Value);
+                                }
+                            }
                         }
 
                     }
@@ -546,7 +650,8 @@ namespace AppMinas.Controllers
             return true;
         }
 
-        public bool CrearTabla(int tipoTabla, string NombreTabla, ArrayList Columnas)
+        // TODO------Se elimino el parametro tipotabla no se requiere
+        public bool CrearTabla(string NombreTabla, ArrayList Columnas)
         {
             using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
             {
