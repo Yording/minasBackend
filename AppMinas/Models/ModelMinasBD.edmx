@@ -326,6 +326,7 @@
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ConsultarFormularios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdActividad" Type="varchar" Mode="In" />
           <Parameter Name="Formulario" Type="varchar" Mode="In" />
@@ -573,6 +574,7 @@
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
         </EntityContainer>
         <EntityType Name="Campo">
           <Key>
@@ -912,6 +914,10 @@
           <Property Type="String" Name="table_derecha" Nullable="true" MaxLength="128" />
           <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
         </ComplexType>
+        <ComplexType Name="ConsultarDisponibilidadJob_Result">
+          <Property Type="Int32" Name="idJob" Nullable="false" />
+          <Property Type="Int32" Name="cantidad" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1126,6 +1132,14 @@
           <FunctionImportMapping FunctionImportName="UpdateRegistro" FunctionName="minasDBModel.Store.UpdateRegistro" />
           <FunctionImportMapping FunctionImportName="ValidarRegistroActualizar" FunctionName="minasDBModel.Store.ValidarRegistroActualizar" />
           <FunctionImportMapping FunctionImportName="EliminarDetalleActividad" FunctionName="minasDBModel.Store.EliminarDetalleActividad" />
+          <FunctionImportMapping FunctionImportName="ConsultarDisponibilidadJob" FunctionName="minasDBModel.Store.ConsultarDisponibilidadJob">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="minasDBModel.ConsultarDisponibilidadJob_Result">
+                <ScalarProperty Name="idJob" ColumnName="idJob" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

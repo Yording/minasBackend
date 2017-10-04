@@ -304,5 +304,10 @@ namespace AppMinas.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("EliminarDetalleActividad", nombreTablaParameter, idActividadParameter);
         }
+    
+        public virtual ObjectResult<ConsultarDisponibilidadJob_Result> ConsultarDisponibilidadJob()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarDisponibilidadJob_Result>("ConsultarDisponibilidadJob");
+        }
     }
 }
