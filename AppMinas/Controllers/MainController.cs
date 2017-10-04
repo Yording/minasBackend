@@ -264,6 +264,7 @@ namespace AppMinas.Controllers
                     Dictionary<string, ArrayList> DictTablasColumnasFormulariosDetalles = new Dictionary<string, ArrayList>();
                     Dictionary<string, ArrayList> DictTablasDatos= new Dictionary<string, ArrayList>();
                     Dictionary<string, Dictionary<string, ArrayList>> DictTablasDatosDetalles = new Dictionary<string, Dictionary<string, ArrayList>>();
+                    Dictionary<string, Dictionary<string, ArrayList>> DictTablasDatosDetallesActualizar = new Dictionary<string, Dictionary<string, ArrayList>>();
                     Dictionary<string, ArrayList> DictTablasDatosActualizar = new Dictionary<string, ArrayList>();
 
                     // TODO----No se requiere estas variables seran reemplazadas por diccionarios
@@ -311,7 +312,9 @@ namespace AppMinas.Controllers
                                             DictTablasColumnasFormulariosDetalles.Add(TableName, new ArrayList { });
                                             DictTablasColumnasDetalles.Add(TableName, new Dictionary<string, ArrayList> { });
                                             DictTablasDatosDetalles.Add(TableName, new Dictionary<string, ArrayList> { });
+                                            DictTablasDatosDetallesActualizar.Add(TableName, new Dictionary<string, ArrayList> { });
                                             BandIDColumn = false;
+                                            i = 0;
                                         }
                                        
                                         if (!RegistroExiste(TableName, ColumnaActividadExiste, activiesDetailVicitrack.ID.ToString()))
@@ -388,24 +391,26 @@ namespace AppMinas.Controllers
 
                                  
                                         }
-
-                                        if (value.Value.GetType().ToString() == "Newtonsoft.Json.Linq.JArray")
+                                        if (i == 0)
                                         {
+                                            if (value.Value.GetType().ToString() == "Newtonsoft.Json.Linq.JArray")
+                                            {
 
-                                            string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
-                                            //TODO------Se elimina el parametro columnasDetalleNames y se agrega DictTablasColumnasDetalles[TableName]
-                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnasFormulariosDetalles[TableName]);
-                                            //columnasDetalleNames.Add(ColumnIndividual); //TODO----Se elimina esta linea
-                                            DictTablasColumnasFormulariosDetalles[TableName].Add(ColumnIndividual);
-                                            
-                                        }
-                                        else
-                                        {
-                                            string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
-                                            //TODO------Se elimina el parametro columnasStringsNames y se agrega DictTablasColumnas[TableName]
-                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnas[TableName]);
-                                            //columnasStringsNames.Add(ColumnIndividual); //TODO-----Esta linea ya no es necesaria
-                                            DictTablasColumnas[TableName].Add(ColumnIndividual);
+                                                string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
+                                                //TODO------Se elimina el parametro columnasDetalleNames y se agrega DictTablasColumnasDetalles[TableName]
+                                                ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnasFormulariosDetalles[TableName]);
+                                                //columnasDetalleNames.Add(ColumnIndividual); //TODO----Se elimina esta linea
+                                                DictTablasColumnasFormulariosDetalles[TableName].Add(ColumnIndividual);
+
+                                            }
+                                            else
+                                            {
+                                                string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
+                                                //TODO------Se elimina el parametro columnasStringsNames y se agrega DictTablasColumnas[TableName]
+                                                ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnas[TableName]);
+                                                //columnasStringsNames.Add(ColumnIndividual); //TODO-----Esta linea ya no es necesaria
+                                                DictTablasColumnas[TableName].Add(ColumnIndividual);
+                                            }
                                         }
                                         
                                         
@@ -465,15 +470,18 @@ namespace AppMinas.Controllers
 
                                                     if (!DictTablasColumnasDetalles[TableName].ContainsKey(columnaDetalle))
                                                     {
+                                                        //Se agregan columnas claves a los detalles
+                                                        list[0].Insert(0, "IdActividad");
                                                         DictTablasColumnasDetalles[TableName].Add(columnaDetalle, list[0]);
-                                                        DictTablasDatosDetalles[TableName].Add(columnaDetalle, new ArrayList { });
+                                                        DictTablasDatosDetallesActualizar[TableName].Add(columnaDetalle, new ArrayList { });
 
 
                                                     }
 
-                                                    foreach (var item in list[1])
+                                                    foreach (ArrayList item in list[1])
                                                     {
-                                                        DictTablasDatosDetalles[TableName][columnaDetalle].Add(item);
+                                                        item.Insert(0, ConfigurarDato(activiesDetailVicitrack.ID.ToString()));
+                                                        DictTablasDatosDetallesActualizar[TableName][columnaDetalle].Add(item);
                                                     }
 
                                                 }
@@ -498,7 +506,7 @@ namespace AppMinas.Controllers
                                     DictTablasDatosActualizar[TableName].Add(DatosActualizar);
                                 }
 
-                                //i++; // TODO----- ya no se requiere esta variable
+                                i++; // TODO----- ya no se requiere esta variable
                             }
                         };// fin de recorrer las actividades
                     }
@@ -563,6 +571,43 @@ namespace AppMinas.Controllers
                                 }
                             }
                         }
+                        //TODO-----Foreach de todas las tablas para actualizar datos detalles
+                        foreach (KeyValuePair<string, Dictionary<string, ArrayList>> Tabla in DictTablasDatosDetallesActualizar)
+                        {
+                            foreach (KeyValuePair<string, ArrayList> Dato in Tabla.Value)
+                            {
+                                if (Dato.Value.Count > 0)
+                                {
+                                    ArrayList arrayDetalle = Dato.Value;
+                                    string IdActividad = "";
+                                    foreach (ArrayList itemss in arrayDetalle) {
+                                        IdActividad = itemss[0].ToString();
+                                        break;
+                                    }
+
+                                    //List<object> list = new List<object> { Dato.Value[0] };
+                                    //List<object> posicion = new List<object> { list[0] };
+                                    //object idactivida = posicion[1];
+                                    //foreach(ArrayList item in list)
+                                    //{
+                                    //    string itedsad = item[0];
+                                    //}
+
+                                    bool eliminarDetalle = EliminarDetalle(Tabla.Key + Dato.Key, IdActividad);
+                                    if (eliminarDetalle)
+                                    {
+                                        bool TablaFormulario = CrearTabla(Tabla.Key + Dato.Key, DictTablasColumnasDetalles[Tabla.Key][Dato.Key]);
+                                        if (TablaFormulario)
+                                        {
+                                            InsertarFormularios(Tabla.Key + Dato.Key, DictTablasColumnasDetalles[Tabla.Key][Dato.Key], Dato.Value);
+                                        }
+                                    }
+                                   
+
+                                }
+                            }
+
+                        }
 
                     }
 
@@ -586,17 +631,7 @@ namespace AppMinas.Controllers
             return true;
 
         }
-        //public bool ValidarItemArrayListVacio(List<ArrayList> list,int index)
-        //{
-        //    list[0].Count
-        //    var flag = false;
-        //    var i = 0;
-        //    foreach(var item in list)
-        //    {
-        //        if(item.c)
-        //    }
-        //    return flag;
-        //}
+
         public string ConcatenarColumnasStrings(ArrayList columnas)
         {
 
@@ -855,11 +890,11 @@ namespace AppMinas.Controllers
                 {
                     string ColumnaTabla = "IdActividad";
 
-                    var Existe = objMINASBDEntities.RegistroExiste(NombreTabla, ColumnaTabla, ConfigurarDato(IdActividad)).ToList();
+                    var Existe = objMINASBDEntities.RegistroExiste(NombreTabla, ColumnaTabla, IdActividad).ToList();
                     if (Existe[0].Value > 0)
                     {
                         //Se verifica que existan datos y se eliminan
-                        objMINASBDEntities.EliminarDetalleActividad(NombreTabla, ConfigurarDato(IdActividad));
+                        objMINASBDEntities.EliminarDetalleActividad(NombreTabla, IdActividad);
 
                     }
 
