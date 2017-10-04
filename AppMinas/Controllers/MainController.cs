@@ -846,6 +846,35 @@ namespace AppMinas.Controllers
 
         }
 
+        public Boolean EliminarDetalle(string NombreTabla, string IdActividad) {
+     
+
+                try {
+
+                using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
+                {
+                    string ColumnaTabla = "IdActividad";
+
+                    var Existe = objMINASBDEntities.RegistroExiste(NombreTabla, ColumnaTabla, ConfigurarDato(IdActividad)).ToList();
+                    if (Existe[0].Value > 0)
+                    {
+                        //Se verifica que existan datos y se eliminan
+                        objMINASBDEntities.EliminarDetalleActividad(NombreTabla, ConfigurarDato(IdActividad));
+
+                    }
+
+                }//Cierre de using
+                return true;    
+
+                }
+                catch (Exception ex) {
+                    return false;
+                }
+
+           
+
+        }
+
         public ArrayList ConfigurarDatoModificar(ArrayList Datos, ArrayList Columnas)
         {
             ArrayList DatosModificar = new ArrayList();

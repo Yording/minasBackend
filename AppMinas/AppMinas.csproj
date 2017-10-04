@@ -250,9 +250,6 @@
     <Compile Include="Models\Estructura.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FO2nIAoXvBZ.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Formulario.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
@@ -279,15 +276,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ModelMinasBD.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagrams.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TablaExiste_Result.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
