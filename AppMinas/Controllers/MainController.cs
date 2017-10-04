@@ -578,7 +578,22 @@ namespace AppMinas.Controllers
                             {
                                 if (Dato.Value.Count > 0)
                                 {
-                                    bool eliminarDetalle = EliminarDetalle(Tabla.Key + Dato.Key, "");
+                                    ArrayList arrayDetalle = Dato.Value;
+                                    string IdActividad = "";
+                                    foreach (ArrayList itemss in arrayDetalle) {
+                                        IdActividad = itemss[0].ToString();
+                                        break;
+                                    }
+
+                                    //List<object> list = new List<object> { Dato.Value[0] };
+                                    //List<object> posicion = new List<object> { list[0] };
+                                    //object idactivida = posicion[1];
+                                    //foreach(ArrayList item in list)
+                                    //{
+                                    //    string itedsad = item[0];
+                                    //}
+
+                                    bool eliminarDetalle = EliminarDetalle(Tabla.Key + Dato.Key, IdActividad);
                                     if (eliminarDetalle)
                                     {
                                         bool TablaFormulario = CrearTabla(Tabla.Key + Dato.Key, DictTablasColumnasDetalles[Tabla.Key][Dato.Key]);

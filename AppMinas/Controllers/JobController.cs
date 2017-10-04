@@ -13,7 +13,7 @@ namespace AppMinas.Controllers
     {
 
 
-        public Resultado get(string NombreTabla, bool Detalle)
+        public Resultado get()
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
 
