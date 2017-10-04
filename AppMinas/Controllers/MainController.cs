@@ -431,15 +431,16 @@ namespace AppMinas.Controllers
                                                 if (!DictTablasColumnasDetalles[TableName].ContainsKey(columnaDetalle))
                                                 {
                                                     //Se agregan columnas claves a los detalles
-                                                    list[0].Add("ID");
+                                                    list[0].Insert(0,"IdActividad");
                                                     DictTablasColumnasDetalles[TableName].Add(columnaDetalle, list[0]);
                                                     DictTablasDatosDetalles[TableName].Add(columnaDetalle, new ArrayList { });
 
 
                                                 }
 
-                                                foreach(var item in list[1])
+                                                foreach(ArrayList item in list[1])
                                                 {
+                                                    item.Insert(0,ConfigurarDato(activiesDetailVicitrack.ID.ToString()));   
                                                     DictTablasDatosDetalles[TableName][columnaDetalle].Add(item);
                                                 }
                                                 
