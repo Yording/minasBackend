@@ -318,5 +318,10 @@ namespace AppMinas.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarFechaConexion", idConexionParameter);
         }
+    
+        public virtual ObjectResult<ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizarConsultar()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConexionesDisponiblesSincronizarConsultar_Result>("ConexionesDisponiblesSincronizarConsultar");
+        }
     }
 }

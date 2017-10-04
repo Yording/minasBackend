@@ -329,6 +329,7 @@
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="ConexionesDisponiblesSincronizarConsultar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ConsultarFormularios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdActividad" Type="varchar" Mode="In" />
@@ -579,8 +580,9 @@
           </FunctionImport>
           <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
           <FunctionImport Name="ActualizarFechaConexion">
-            <Parameter Name="IdConexion" Mode="In" Type="Int32" />
+          <Parameter Name="IdConexion" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)" />
         </EntityContainer>
         <EntityType Name="Campo">
           <Key>
@@ -924,6 +926,18 @@
           <Property Type="Int32" Name="idJob" Nullable="false" />
           <Property Type="Int32" Name="cantidad" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="ConexionesDisponiblesSincronizarConsultar_Result">
+          <Property Type="Int32" Name="idConexion" Nullable="false" />
+          <Property Type="Int32" Name="idTipoConexion" Nullable="false" />
+          <Property Type="Int32" Name="idFormulario" Nullable="false" />
+          <Property Type="Int32" Name="idJob" Nullable="false" />
+          <Property Type="String" Name="nombreConexion" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fuente" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="contrasenafuente" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="periodoSincronizacion" Nullable="false" />
+          <Property Type="String" Name="descripcion" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="fechaActualizacion" Nullable="true" Precision="23" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1147,6 +1161,22 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ActualizarFechaConexion" FunctionName="minasDBModel.Store.ActualizarFechaConexion" />
+          <FunctionImportMapping FunctionImportName="ConexionesDisponiblesSincronizarConsultar" FunctionName="minasDBModel.Store.ConexionesDisponiblesSincronizarConsultar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result">
+                <ScalarProperty Name="idConexion" ColumnName="idConexion" />
+                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
+                <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
+                <ScalarProperty Name="idJob" ColumnName="idJob" />
+                <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
+                <ScalarProperty Name="fuente" ColumnName="fuente" />
+                <ScalarProperty Name="contrasenafuente" ColumnName="contrasenafuente" />
+                <ScalarProperty Name="periodoSincronizacion" ColumnName="periodoSincronizacion" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
