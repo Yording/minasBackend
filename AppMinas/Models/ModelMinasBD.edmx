@@ -28,7 +28,7 @@
           <Property Name="contrasenaFuente" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="periodoSincronizacion" Type="int" Nullable="false" />
           <Property Name="descripcion" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="fechaActualizacion" Type="date" />
+          <Property Name="fechaActualizacion" Type="datetime" />
         </EntityType>
         <EntityType Name="Detalle">
           <Key>
@@ -288,6 +288,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ActualizarFechaConexion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdConexion" Type="int" Mode="In" />
+        </Function>
         <Function Name="AddColumna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
@@ -575,6 +578,9 @@
             <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
+          <FunctionImport Name="ActualizarFechaConexion">
+            <Parameter Name="IdConexion" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Campo">
           <Key>
@@ -601,7 +607,7 @@
           <Property Name="contrasenaFuente" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
           <Property Name="periodoSincronizacion" Type="Int32" Nullable="false" />
           <Property Name="descripcion" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="fechaActualizacion" Type="DateTime" Precision="0" />
+          <Property Name="fechaActualizacion" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Estructura" Relationship="minasDBModel.FK_ConexionEstructura" FromRole="Conexion" ToRole="Estructura" />
           <NavigationProperty Name="Formulario" Relationship="minasDBModel.FK_FormularioConexion" FromRole="Conexion" ToRole="Formulario" />
           <NavigationProperty Name="Detalle" Relationship="minasDBModel.FK_FormularioDetalle" FromRole="Conexion" ToRole="Detalle" />
@@ -1140,6 +1146,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ActualizarFechaConexion" FunctionName="minasDBModel.Store.ActualizarFechaConexion" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

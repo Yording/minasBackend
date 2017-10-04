@@ -309,5 +309,14 @@ namespace AppMinas.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarDisponibilidadJob_Result>("ConsultarDisponibilidadJob");
         }
+    
+        public virtual int ActualizarFechaConexion(Nullable<int> idConexion)
+        {
+            var idConexionParameter = idConexion.HasValue ?
+                new ObjectParameter("IdConexion", idConexion) :
+                new ObjectParameter("IdConexion", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarFechaConexion", idConexionParameter);
+        }
     }
 }
