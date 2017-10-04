@@ -52,6 +52,7 @@ namespace AppMinas.Services
         public string getDetailActivity(string GUID)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_api + string.Format(_apiDetailActivities, this._token, GUID));
+            request.Timeout = 300000;
             try
             {
                 WebResponse response = request.GetResponse();
@@ -64,9 +65,9 @@ namespace AppMinas.Services
             catch (WebException ex)
             {
                 WebResponse errorResponse = ex.Response;
-                using (Stream responseStream = errorResponse.GetResponseStream())
+                using (Stream responseStreams = errorResponse.GetResponseStream())
                 {
-                    StreamReader reader = new StreamReader(responseStream, Encoding.GetEncoding("utf-8"));
+                    StreamReader reader = new StreamReader(responseStreams, Encoding.GetEncoding("utf-8"));
                     String errorText = reader.ReadToEnd();
                     // log errorText
                 }
