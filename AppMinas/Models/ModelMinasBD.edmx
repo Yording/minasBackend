@@ -21,13 +21,13 @@
           <Property Name="idConexion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idTipoConexion" Type="int" Nullable="false" />
           <Property Name="idFormulario" Type="int" Nullable="false" />
+          <Property Name="idJob" Type="int" Nullable="false" />
           <Property Name="nombreConexion" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="fuente" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="usuarioFuente" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="contrasenaFuente" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="periodoSincronizacion" Type="int" Nullable="false" />
           <Property Name="descripcion" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="idJob" Type="int" Nullable="false" />
           <Property Name="fechaActualizacion" Type="datetime" />
         </EntityType>
         <EntityType Name="Detalle">
@@ -36,11 +36,11 @@
           </Key>
           <Property Name="idDetalle" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idConexion" Type="int" Nullable="false" />
-          <Property Name="urlDetalle" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="idTipoDetalle" Type="int" Nullable="false" />
-          <Property Name="idActividad" Type="varchar(max)" />
-          <Property Name="descripcion" Type="varchar(max)" />
+          <Property Name="idActividad" Type="varchar" MaxLength="20" />
           <Property Name="nombreActividad" Type="varchar" MaxLength="50" />
+          <Property Name="urlDetalle" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="descripcion" Type="varchar(max)" />
+          <Property Name="idTipoDetalle" Type="int" Nullable="false" />
           <Property Name="fechaCreacion" Type="date" />
         </EntityType>
         <EntityType Name="Estructura">
@@ -156,18 +156,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Conexion_Job">
-          <End Role="Job" Type="Self.Job" Multiplicity="1" />
-          <End Role="Conexion" Type="Self.Conexion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Job">
-              <PropertyRef Name="idJob" />
-            </Principal>
-            <Dependent Role="Conexion">
-              <PropertyRef Name="idJob" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ConexionEstructura">
           <End Role="Conexion" Type="Self.Conexion" Multiplicity="1" />
           <End Role="Estructura" Type="Self.Estructura" Multiplicity="*" />
@@ -213,6 +201,18 @@
             </Principal>
             <Dependent Role="Formulario1">
               <PropertyRef Name="idFormulario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobConexion">
+          <End Role="Job" Type="Self.Job" Multiplicity="1" />
+          <End Role="Conexion" Type="Self.Conexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="idJob" />
+            </Principal>
+            <Dependent Role="Conexion">
+              <PropertyRef Name="idJob" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -289,7 +289,7 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="ActualizarFechaConexion" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="IdConexion" Type="int" Mode="In" />
+          <Parameter Name="GuidFormulario" Type="varchar" Mode="In" />
         </Function>
         <Function Name="AddColumna" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
@@ -330,12 +330,13 @@
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
         </Function>
         <Function Name="ConexionesDisponiblesSincronizarConsultar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="ConsultarActividades" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ConsultarFormularios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdActividad" Type="varchar" Mode="In" />
           <Parameter Name="Formulario" Type="varchar" Mode="In" />
           <Parameter Name="FechaInicio" Type="varchar" Mode="In" />
           <Parameter Name="FechaFin" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="CrearTabla" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="nvarchar(max)" Mode="In" />
         </Function>
@@ -343,7 +344,6 @@
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="IdActividad" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="Prueba" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
@@ -355,36 +355,6 @@
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
           <Parameter Name="IdPK" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="TablaExiste" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
         </Function>
@@ -419,10 +389,6 @@
             <End Role="Campo" EntitySet="Campo" />
             <End Role="Estructura" EntitySet="Estructura" />
           </AssociationSet>
-          <AssociationSet Name="FK_Conexion_Job" Association="Self.FK_Conexion_Job">
-            <End Role="Job" EntitySet="Job" />
-            <End Role="Conexion" EntitySet="Conexion" />
-          </AssociationSet>
           <AssociationSet Name="FK_ConexionEstructura" Association="Self.FK_ConexionEstructura">
             <End Role="Conexion" EntitySet="Conexion" />
             <End Role="Estructura" EntitySet="Estructura" />
@@ -438,6 +404,10 @@
           <AssociationSet Name="FK_FormularioFormulario1" Association="Self.FK_FormularioFormulario1">
             <End Role="Formulario" EntitySet="Formulario" />
             <End Role="Formulario1" EntitySet="Formulario1" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobConexion" Association="Self.FK_JobConexion">
+            <End Role="Job" EntitySet="Job" />
+            <End Role="Conexion" EntitySet="Conexion" />
           </AssociationSet>
           <AssociationSet Name="FK_LocacionFormulario1" Association="Self.FK_LocacionFormulario1">
             <End Role="Locacion" EntitySet="Locacion" />
@@ -530,6 +500,9 @@
             <End Role="TipoLocacion" EntitySet="TipoLocacion" />
             <End Role="Locacion" EntitySet="Locacion" />
           </AssociationSet>
+          <FunctionImport Name="ActualizarFechaConexion">
+          <Parameter Name="GuidFormulario" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="AddColumna">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
@@ -568,6 +541,8 @@
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)" />
+          <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
           <FunctionImport Name="ConsultarFormularios">
             <Parameter Name="IdActividad" Mode="In" Type="String" />
             <Parameter Name="Formulario" Mode="In" Type="String" />
@@ -576,6 +551,10 @@
           </FunctionImport>
           <FunctionImport Name="CrearTabla">
           <Parameter Name="NombreTabla" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="EliminarDetalleActividad">
+            <Parameter Name="NombreTabla" Mode="In" Type="String" />
+            <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Prueba">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
@@ -604,50 +583,6 @@
             <Parameter Name="UpdateOn" Mode="In" Type="String" />
             <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="EliminarDetalleActividad">
-            <Parameter Name="NombreTabla" Mode="In" Type="String" />
-            <Parameter Name="IdActividad" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
-          <FunctionImport Name="ActualizarFechaConexion">
-          <Parameter Name="IdConexion" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)" />
-          <FunctionImport Name="ConsultarActividades">
-            <Parameter Name="Formulario" Mode="In" Type="String" />
-            <Parameter Name="FechaInicio" Mode="In" Type="String" />
-            <Parameter Name="FechaFin" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(minasDBModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(minasDBModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
         <EntityType Name="Campo">
           <Key>
@@ -687,7 +622,7 @@
           </Key>
           <Property Name="idDetalle" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idConexion" Type="Int32" Nullable="false" />
-          <Property Name="idActividad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="idActividad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="nombreActividad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="urlDetalle" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -974,23 +909,6 @@
           <Property Type="String" Name="table_derecha" Nullable="true" MaxLength="128" />
           <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
         </ComplexType>
-        <ComplexType Name="TablaExiste_Result">
-          <Property Type="Int32" Name="id_tabla" Nullable="false" />
-          <Property Type="Int64" Name="id_columna" Nullable="true" />
-          <Property Type="String" Name="columna" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Tipo" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="Longitud" Nullable="true" />
-          <Property Type="Byte" Name="PRECISION" Nullable="false" />
-          <Property Type="Byte" Name="escala" Nullable="false" />
-          <Property Type="Int32" Name="Isnullable" Nullable="true" />
-          <Property Type="Int32" Name="id_fk" Nullable="true" />
-          <Property Type="String" Name="table_derecha" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
-        </ComplexType>
-        <ComplexType Name="ConsultarDisponibilidadJob_Result">
-          <Property Type="Int32" Name="idJob" Nullable="false" />
-          <Property Type="Int32" Name="cantidad" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="ConexionesDisponiblesSincronizarConsultar_Result">
           <Property Type="Int32" Name="idConexion" Nullable="false" />
           <Property Type="Int32" Name="idTipoConexion" Nullable="false" />
@@ -1004,16 +922,22 @@
           <Property Type="DateTime" Name="fechaActualizacion" Nullable="true" Precision="23" />
           <Property Type="String" Name="GUIDFormulario" Nullable="false" MaxLength="40" />
         </ComplexType>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
+        <ComplexType Name="ConsultarDisponibilidadJob_Result">
+          <Property Type="Int32" Name="idJob" Nullable="false" />
+          <Property Type="Int32" Name="cantidad" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        <ComplexType Name="TablaExiste_Result">
+          <Property Type="Int32" Name="id_tabla" Nullable="false" />
+          <Property Type="Int64" Name="id_columna" Nullable="true" />
+          <Property Type="String" Name="columna" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Tipo" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="Longitud" Nullable="true" />
+          <Property Type="Byte" Name="PRECISION" Nullable="false" />
+          <Property Type="Byte" Name="escala" Nullable="false" />
+          <Property Type="Int32" Name="Isnullable" Nullable="true" />
+          <Property Type="Int32" Name="id_fk" Nullable="true" />
+          <Property Type="String" Name="table_derecha" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1173,6 +1097,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ActualizarFechaConexion" FunctionName="minasDBModel.Store.ActualizarFechaConexion" />
           <FunctionImportMapping FunctionImportName="AddColumna" FunctionName="minasDBModel.Store.AddColumna" />
           <FunctionImportMapping FunctionImportName="AddMedia" FunctionName="minasDBModel.Store.AddMedia" />
           <FunctionImportMapping FunctionImportName="AddRegistro" FunctionName="minasDBModel.Store.AddRegistro" />
@@ -1204,7 +1129,34 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConexionesDisponiblesSincronizarConsultar" FunctionName="minasDBModel.Store.ConexionesDisponiblesSincronizarConsultar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result">
+                <ScalarProperty Name="idConexion" ColumnName="idConexion" />
+                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
+                <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
+                <ScalarProperty Name="idJob" ColumnName="idJob" />
+                <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
+                <ScalarProperty Name="fuente" ColumnName="fuente" />
+                <ScalarProperty Name="contrasenafuente" ColumnName="contrasenafuente" />
+                <ScalarProperty Name="periodoSincronizacion" ColumnName="periodoSincronizacion" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
+                <ScalarProperty Name="GUIDFormulario" ColumnName="GUIDFormulario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultarDisponibilidadJob" FunctionName="minasDBModel.Store.ConsultarDisponibilidadJob">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="minasDBModel.ConsultarDisponibilidadJob_Result">
+                <ScalarProperty Name="idJob" ColumnName="idJob" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultarFormularios" FunctionName="minasDBModel.Store.ConsultarFormularios" />
           <FunctionImportMapping FunctionImportName="CrearTabla" FunctionName="minasDBModel.Store.CrearTabla" />
+          <FunctionImportMapping FunctionImportName="EliminarDetalleActividad" FunctionName="minasDBModel.Store.EliminarDetalleActividad" />
           <FunctionImportMapping FunctionImportName="Prueba" FunctionName="minasDBModel.Store.Prueba" />
           <FunctionImportMapping FunctionImportName="RegistroExiste" FunctionName="minasDBModel.Store.RegistroExiste" />
           <FunctionImportMapping FunctionImportName="TablaExiste" FunctionName="minasDBModel.Store.TablaExiste">
@@ -1227,58 +1179,6 @@
           <FunctionImportMapping FunctionImportName="TablasConsulta" FunctionName="minasDBModel.Store.TablasConsulta" />
           <FunctionImportMapping FunctionImportName="UpdateRegistro" FunctionName="minasDBModel.Store.UpdateRegistro" />
           <FunctionImportMapping FunctionImportName="ValidarRegistroActualizar" FunctionName="minasDBModel.Store.ValidarRegistroActualizar" />
-          <FunctionImportMapping FunctionImportName="EliminarDetalleActividad" FunctionName="minasDBModel.Store.EliminarDetalleActividad" />
-          <FunctionImportMapping FunctionImportName="ConsultarDisponibilidadJob" FunctionName="minasDBModel.Store.ConsultarDisponibilidadJob">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="minasDBModel.ConsultarDisponibilidadJob_Result">
-                <ScalarProperty Name="idJob" ColumnName="idJob" />
-                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ActualizarFechaConexion" FunctionName="minasDBModel.Store.ActualizarFechaConexion" />
-          <FunctionImportMapping FunctionImportName="ConexionesDisponiblesSincronizarConsultar" FunctionName="minasDBModel.Store.ConexionesDisponiblesSincronizarConsultar">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result">
-                <ScalarProperty Name="idConexion" ColumnName="idConexion" />
-                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
-                <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
-                <ScalarProperty Name="idJob" ColumnName="idJob" />
-                <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
-                <ScalarProperty Name="fuente" ColumnName="fuente" />
-                <ScalarProperty Name="contrasenafuente" ColumnName="contrasenafuente" />
-                <ScalarProperty Name="periodoSincronizacion" ColumnName="periodoSincronizacion" />
-                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
-                <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
-                <ScalarProperty Name="GUIDFormulario" ColumnName="GUIDFormulario" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ConsultarActividades" FunctionName="minasDBModel.Store.ConsultarActividades" />
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="minasDBModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="minasDBModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="minasDBModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="minasDBModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="minasDBModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="minasDBModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="minasDBModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="minasDBModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="minasDBModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -635,14 +635,14 @@ namespace AppMinas.Controllers
         }
 
         //Actualiza la fecha de actualizacion de una conexion cuando esta se ha sincronizado
-        public bool ActualizarFechaActualizacion(string IdConexion)
+        public bool ActualizarFechaActualizacion(string GuidFormulario)
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
             try
             {
                 using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
                 {
-                    objMINASBDEntities.ActualizarFechaConexion(Convert.ToInt32(IdConexion));
+                    objMINASBDEntities.ActualizarFechaConexion(GuidFormulario);
                     return true;
                 }
             }
