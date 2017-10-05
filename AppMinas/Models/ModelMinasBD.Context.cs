@@ -165,27 +165,6 @@ namespace AppMinas.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarDisponibilidadJob_Result>("ConsultarDisponibilidadJob");
         }
     
-        public virtual int ConsultarFormularios(string idActividad, string formulario, string fechaInicio, string fechaFin)
-        {
-            var idActividadParameter = idActividad != null ?
-                new ObjectParameter("IdActividad", idActividad) :
-                new ObjectParameter("IdActividad", typeof(string));
-    
-            var formularioParameter = formulario != null ?
-                new ObjectParameter("Formulario", formulario) :
-                new ObjectParameter("Formulario", typeof(string));
-    
-            var fechaInicioParameter = fechaInicio != null ?
-                new ObjectParameter("FechaInicio", fechaInicio) :
-                new ObjectParameter("FechaInicio", typeof(string));
-    
-            var fechaFinParameter = fechaFin != null ?
-                new ObjectParameter("FechaFin", fechaFin) :
-                new ObjectParameter("FechaFin", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConsultarFormularios", idActividadParameter, formularioParameter, fechaInicioParameter, fechaFinParameter);
-        }
-    
         public virtual int CrearTabla(string nombreTabla)
         {
             var nombreTablaParameter = nombreTabla != null ?
@@ -326,6 +305,23 @@ namespace AppMinas.Models
                 new ObjectParameter("Obligatorio", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddColumna", nombreTablaParameter, nombreColumnaParameter, tipoColumnaParameter, obligatorioParameter);
+        }
+    
+        public virtual int ConsultarActividades(string formulario, string fechaInicio, string fechaFin)
+        {
+            var formularioParameter = formulario != null ?
+                new ObjectParameter("Formulario", formulario) :
+                new ObjectParameter("Formulario", typeof(string));
+    
+            var fechaInicioParameter = fechaInicio != null ?
+                new ObjectParameter("FechaInicio", fechaInicio) :
+                new ObjectParameter("FechaInicio", typeof(string));
+    
+            var fechaFinParameter = fechaFin != null ?
+                new ObjectParameter("FechaFin", fechaFin) :
+                new ObjectParameter("FechaFin", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConsultarActividades", formularioParameter, fechaInicioParameter, fechaFinParameter);
         }
     }
 }

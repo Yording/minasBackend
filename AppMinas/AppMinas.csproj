@@ -209,11 +209,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ActividadesController.cs" />
     <Compile Include="Controllers\CargarMediaController.cs" />
     <Compile Include="Controllers\ConexionesController.cs" />
     <Compile Include="Controllers\DetallesController.cs" />
     <Compile Include="Controllers\FormulariosController.cs" />
-    <Compile Include="Controllers\HelperController.cs" />
     <Compile Include="Controllers\HelperUpController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\LocacionesController.cs" />

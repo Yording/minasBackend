@@ -332,13 +332,12 @@
         <Function Name="ConexionesDisponiblesSincronizarConsultar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="idJob" Type="int" Mode="In" />
         </Function>
-        <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="ConsultarFormularios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="IdActividad" Type="varchar" Mode="In" />
+        <Function Name="ConsultarActividades" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Formulario" Type="varchar" Mode="In" />
           <Parameter Name="FechaInicio" Type="varchar" Mode="In" />
           <Parameter Name="FechaFin" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="CrearTabla" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="nvarchar(max)" Mode="In" />
         </Function>
@@ -538,12 +537,6 @@
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
-          <FunctionImport Name="ConsultarFormularios">
-            <Parameter Name="IdActividad" Mode="In" Type="String" />
-            <Parameter Name="Formulario" Mode="In" Type="String" />
-            <Parameter Name="FechaInicio" Mode="In" Type="String" />
-            <Parameter Name="FechaFin" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="CrearTabla">
           <Parameter Name="NombreTabla" Mode="In" Type="String" />
           </FunctionImport>
@@ -586,6 +579,11 @@
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
             <Parameter Name="TipoColumna" Mode="In" Type="String" />
             <Parameter Name="Obligatorio" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarActividades">
+            <Parameter Name="Formulario" Mode="In" Type="String" />
+            <Parameter Name="FechaInicio" Mode="In" Type="String" />
+            <Parameter Name="FechaFin" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Campo">
@@ -1140,7 +1138,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ConsultarFormularios" FunctionName="minasDBModel.Store.ConsultarFormularios" />
           <FunctionImportMapping FunctionImportName="CrearTabla" FunctionName="minasDBModel.Store.CrearTabla" />
           <FunctionImportMapping FunctionImportName="EliminarDetalleActividad" FunctionName="minasDBModel.Store.EliminarDetalleActividad" />
           <FunctionImportMapping FunctionImportName="Prueba" FunctionName="minasDBModel.Store.Prueba" />
@@ -1183,6 +1180,7 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AddColumna" FunctionName="minasDBModel.Store.AddColumna" />
+          <FunctionImportMapping FunctionImportName="ConsultarActividades" FunctionName="minasDBModel.Store.ConsultarActividades" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
