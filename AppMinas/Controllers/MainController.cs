@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using AppMinas.Models;
+using System.Text;
 
 namespace AppMinas.Controllers
 {
@@ -379,7 +380,7 @@ namespace AppMinas.Controllers
                                             if (value.Value.GetType().ToString() == "Newtonsoft.Json.Linq.JArray")
                                             {
 
-                                                string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
+                                                string ColumnIndividual = EliminarEspaciosAcentos(value.apiId.ToString());
                                                 //TODO------Se elimina el parametro columnasDetalleNames y se agrega DictTablasColumnasDetalles[TableName]
                                                 ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnasFormulariosDetalles[TableName]);
                                                 //columnasDetalleNames.Add(ColumnIndividual); //TODO----Se elimina esta linea
@@ -388,7 +389,7 @@ namespace AppMinas.Controllers
                                             }
                                             else
                                             {
-                                                string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
+                                                string ColumnIndividual = EliminarEspaciosAcentos(value.apiId.ToString());
                                                 //TODO------Se elimina el parametro columnasStringsNames y se agrega DictTablasColumnas[TableName]
                                                 ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnas[TableName]);
                                                 //columnasStringsNames.Add(ColumnIndividual); //TODO-----Esta linea ya no es necesaria
@@ -411,7 +412,7 @@ namespace AppMinas.Controllers
                                         else
                                         {
 
-                                            string columnaDetalle = EliminarEspacios(value.apiId.ToString());
+                                            string columnaDetalle = EliminarEspaciosAcentos(value.apiId.ToString());
                                             List<ArrayList> list = ColumnsNamesDetail(value.Value);
                                             if (list[0].Count > 0)
                                             {
@@ -446,7 +447,7 @@ namespace AppMinas.Controllers
                                             }
                                             else
                                             {
-                                                string columnaDetalle = EliminarEspacios(value.apiId.ToString());
+                                                string columnaDetalle = EliminarEspaciosAcentos(value.apiId.ToString());
                                                 List<ArrayList> list = ColumnsNamesDetail(value.Value);
                                                 if (list[0].Count > 0)
                                                 {
@@ -828,9 +829,21 @@ namespace AppMinas.Controllers
             return Columna;
         }
 
-        public string EliminarEspacios(string Columna)
+        public string EliminarEspaciosAcentos(string Columna)
         {
-            return Columna.Replace(" ", "");
+            Columna = Columna.Replace(" ", "");
+
+            var normalizedString = Columna.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+            for (int i = 0; i < normalizedString.Length; i++)
+            {
+                var uc = System.Globalization.CharUnicodeInfo.GetUnicodeCategory(normalizedString[i]);
+                if (uc != System.Globalization.UnicodeCategory.NonSpacingMark)
+                {
+                    sb.Append(normalizedString[i]);
+                }
+            }
+            return (sb.ToString().Normalize(NormalizationForm.FormC));
         }
 
         public List<ArrayList> ColumnsNamesDetail(object detail)
@@ -856,7 +869,7 @@ namespace AppMinas.Controllers
                         // Guardamos los nombres de las columnas
                         if (idDetalle == 1)
                         {
-                            columnsNames.Add(EliminarEspacios(formValue.apiId.ToString()));
+                            columnsNames.Add(EliminarEspaciosAcentos(formValue.apiId.ToString()));
                         }
                         // Guardamos los registros del detalle
                         values.Add(ConfigurarDato(formValue.Value.ToString()));
