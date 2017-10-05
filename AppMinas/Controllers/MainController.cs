@@ -776,12 +776,20 @@ namespace AppMinas.Controllers
 
                     string tipoDato = "VARCHAR(MAX)";
                     string nulidad = "NULL";
+                    int ContadorColumnas = 0;
 
                     foreach (var Columns in ConcatenarColumnasStrings(Columnas).Split(','))
                     {
+                         tipoDato = "VARCHAR(MAX)";
+                         nulidad = "NULL";
 
+                        if (ContadorColumnas == 4 || ContadorColumnas == 5) {
+                            tipoDato = "DATETIME";
+                        }
+                  
                         objMINASBDEntities.AddColumna(NombreTabla, Columns, tipoDato, nulidad);
 
+                        ContadorColumnas++;
                     }
 
 
