@@ -187,26 +187,6 @@ namespace AppMinas.Controllers
                 if (authentication.status == "OK")
                 {
 
-
-                    // Ejemplo Diccionario
-                    //Dictionary<string, ArrayList> openWith = new Dictionary<string, ArrayList>();
-
-                    //// Add some elements to the dictionary. There are no 
-                    //// duplicate keys, but some of the values are duplicates.
-                    //openWith.Add("F803DDASD", new ArrayList { 1,2,3} );
-                    //openWith.Add("bmp", new ArrayList { 12, 2, 3 });
-                    //openWith.Add("dib", new ArrayList { 1, 20, 3 });
-                    //openWith.Add("rtf", new ArrayList { 1, 2, 30 });
-
-                    //openWith["rtf"].Add(4);
-                    //ArrayList valor = openWith["rtf"];
-
-                    //Ejemplo para acceder item de listas vacias
-                    //ArrayList listprueba = new ArrayList();
-                    //listprueba.Add(new ArrayList { });
-                    //listprueba.Add(new ArrayList { });
-                    //ArrayList columnas = listprueba[0];
-                    //columna
                     // Se obtiene el token de acceso que devolvio la api
                     string _token = authentication.AccessToken;
 
@@ -230,7 +210,8 @@ namespace AppMinas.Controllers
                     ResponseModel responseConnections = JsonConvert.DeserializeObject<ResponseModel>(connectionService.getConnectionsForms());
 
                     // Se obtiene una lista con las conexiones creadas en la BD.
-                    List<ConexionModel> connectionsForms = JsonConvert.DeserializeObject<List<ConexionModel>>(responseConnections.value.ToString());
+                    //List<ConexionModel> connectionsForms = JsonConvert.DeserializeObject<List<ConexionModel>>(responseConnections.value.ToString());
+                    List<ConexionesDisponiblesSincronizarConsultar_Result> connectionsSincronizar = ConexionesDisponiblesSincronizar();
 
                     // Insertamos los formularios de vicitrack a la tabla Formularios
                     insertarFormularios(formsVicitrack);
@@ -278,15 +259,17 @@ namespace AppMinas.Controllers
                     bool Actualizar = false;
 
                     //Validar si existen conexiones
-                    if (connectionsForms.Count > 0)
+                    if (connectionsSincronizar.Count > 0)
                     {
                         // Foreach de todos las actividades(registros en los formularios)
                         foreach (Activity ele in activiesVicitrack)
                         {
                             DetailActivity activiesDetailVicitrack = JsonConvert.DeserializeObject<DetailActivity>(activityService.getDetailActivity(ele.GUID));
-                            ResponseModel responseFindForm = JsonConvert.DeserializeObject<ResponseModel>(connectionService.findConnectionGUIDForms(activiesDetailVicitrack.FormGUID));
+                            // TODO--------Se elimina esta variable responseFindForm
+                            //ResponseModel responseFindForm = JsonConvert.DeserializeObject<ResponseModel>(connectionService.findConnectionGUIDForms(activiesDetailVicitrack.FormGUID));
+                            var res = ExisteConexion(connectionsSincronizar, activiesDetailVicitrack.FormGUID);
 
-                            if (responseFindForm.value.ToString() != "[]")
+                            if (res)
                             {
                                 j = 0;
                                 ArrayList Datos = new ArrayList();
@@ -527,6 +510,7 @@ namespace AppMinas.Controllers
                                 if (TablaFormulario)
                                 {
                                     InsertarFormularios(Dato.Key, DictTablasColumnas[Dato.Key], Dato.Value);
+                                    ActualizarFechaActualizacion(Dato.Key.Substring(1, Dato.Key.Length-1));
                                 }
                             }
                         }
@@ -543,6 +527,7 @@ namespace AppMinas.Controllers
                                     if (TablaFormulario)
                                     {
                                         InsertarFormularios(Tabla.Key + Dato.Key, DictTablasColumnasDetalles[Tabla.Key][Dato.Key], Dato.Value);
+                                        ActualizarFechaActualizacion(Dato.Key.Substring(1, Dato.Key.Length-1));
                                     }
 
                                 }
@@ -568,6 +553,7 @@ namespace AppMinas.Controllers
                                 if (TablaFormulario)
                                 {
                                     ModificarActividades(Dato.Key, DictTablasColumnas[Dato.Key], Dato.Value);
+                                    ActualizarFechaActualizacion(Dato.Key.Substring(1, Dato.Key.Length-1));
                                 }
                             }
                         }
@@ -585,14 +571,6 @@ namespace AppMinas.Controllers
                                         break;
                                     }
 
-                                    //List<object> list = new List<object> { Dato.Value[0] };
-                                    //List<object> posicion = new List<object> { list[0] };
-                                    //object idactivida = posicion[1];
-                                    //foreach(ArrayList item in list)
-                                    //{
-                                    //    string itedsad = item[0];
-                                    //}
-
                                     bool eliminarDetalle = EliminarDetalle(Tabla.Key + Dato.Key, IdActividad);
                                     if (eliminarDetalle)
                                     {
@@ -600,6 +578,7 @@ namespace AppMinas.Controllers
                                         if (TablaFormulario)
                                         {
                                             InsertarFormularios(Tabla.Key + Dato.Key, DictTablasColumnasDetalles[Tabla.Key][Dato.Key], Dato.Value);
+                                            ActualizarFechaActualizacion(Tabla.Key.Substring(1, Tabla.Key.Length-1));
                                         }
                                     }
                                    
@@ -611,27 +590,70 @@ namespace AppMinas.Controllers
 
                     }
 
-
-
-
-                    /*
-                    if (columnasDetalleNames.Count > 0)
-                    {
-                        bool TablaDetalle = CrearTabla(2, "D" + FormGuid, columnasDetalleNames);
-                        if (TablaDetalle)
-                        {
-                            //metodo insertar
-                            insertarFormularios("D" + FormGuid, columnasStringsNames, DatosColumnas);
-                        }
-                    }
-
-                    */
                 }
             }
             return true;
 
         }
+        public bool ExisteConexion(List<ConexionesDisponiblesSincronizarConsultar_Result> listConexiones, string idFormulario)
+        {
+            bool res = false;
+            foreach(ConexionesDisponiblesSincronizarConsultar_Result item in listConexiones)
+            {
+                if(item.GUIDFormulario == idFormulario)
+                {
+                    res = true;
+                    break;
+                }
+            }
 
+            return res;
+        }
+
+        public List<Models.ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizar()
+        {
+            Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
+            List<Models.ConexionesDisponiblesSincronizarConsultar_Result> lstConexionesDisponible = null;
+            try
+            {
+                using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
+                {
+
+                    lstConexionesDisponible = objMINASBDEntities.ConexionesDisponiblesSincronizarConsultar().ToList();
+
+                    objResultado.Data = lstConexionesDisponible;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                objResultado.TipoResultado = false;
+                objResultado.Mensaje = ex.Message;
+
+            }
+            return lstConexionesDisponible;
+        }
+
+        //Actualiza la fecha de actualizacion de una conexion cuando esta se ha sincronizado
+        public bool ActualizarFechaActualizacion(string IdConexion)
+        {
+            Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
+            try
+            {
+                using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
+                {
+                    objMINASBDEntities.ActualizarFechaConexion(Convert.ToInt32(IdConexion));
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                objResultado.TipoResultado = false;
+                objResultado.Mensaje = ex.Message;
+                return false;
+            }
+
+        }
         public string ConcatenarColumnasStrings(ArrayList columnas)
         {
 

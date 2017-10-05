@@ -23,5 +23,6 @@ namespace AppMinas.Models
         public int periodoSincronizacion { get; set; }
         public string descripcion { get; set; }
         public Nullable<System.DateTime> fechaActualizacion { get; set; }
+        public string GUIDFormulario { get; set; }
     }
 }
