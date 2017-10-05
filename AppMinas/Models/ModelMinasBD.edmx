@@ -505,12 +505,6 @@
           <FunctionImport Name="ActualizarFechaConexion">
           <Parameter Name="GuidFormulario" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AddColumna">
-            <Parameter Name="NombreTabla" Mode="In" Type="String" />
-            <Parameter Name="NombreColumna" Mode="In" Type="String" />
-            <Parameter Name="TipoColumna" Mode="In" Type="String" />
-            <Parameter Name="Obligatorio" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="AddMedia">
             <Parameter Name="idConexion" Mode="In" Type="Int32" />
             <Parameter Name="UrlDetalle" Mode="In" Type="String" />
@@ -585,7 +579,13 @@
             <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)">
-            <Parameter Name="idJob" Mode="In" Type="Int32" />
+          <Parameter Name="idJob" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddColumna">
+            <Parameter Name="NombreTabla" Mode="In" Type="String" />
+            <Parameter Name="NombreColumna" Mode="In" Type="String" />
+            <Parameter Name="TipoColumna" Mode="In" Type="String" />
+            <Parameter Name="Obligatorio" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Campo">
@@ -1102,7 +1102,6 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ActualizarFechaConexion" FunctionName="minasDBModel.Store.ActualizarFechaConexion" />
-          <FunctionImportMapping FunctionImportName="AddColumna" FunctionName="minasDBModel.Store.AddColumna" />
           <FunctionImportMapping FunctionImportName="AddMedia" FunctionName="minasDBModel.Store.AddMedia" />
           <FunctionImportMapping FunctionImportName="AddRegistro" FunctionName="minasDBModel.Store.AddRegistro" />
           <FunctionImportMapping FunctionImportName="AddRegla" FunctionName="minasDBModel.Store.AddRegla" />
@@ -1183,6 +1182,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AddColumna" FunctionName="minasDBModel.Store.AddColumna" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
