@@ -115,67 +115,6 @@ namespace AppMinas.Controllers
 
         }
 
-        /* public async void Run()
-         {
-             Token authentication = JsonConvert.DeserializeObject<Token>(authService.getAuthentication());
-             if (authentication.status == "OK")
-             {
-                 // Se obtiene el token de acceso que devolvio la api
-                 string _token = authentication.AccessToken;
-
-                 // Instancias a utlizar
-                 activityService = new ActivityService(_token);
-                 formService = new FormService(_token);
-                 connectionService = new ConnectionService();
-
-                 // Se Obtiene una lista con todos los formularios alojados en la api
-                 List<Form> formsVicitrack = JsonConvert.DeserializeObject<List<Form>>(formService.getForms());
-
-                 // Obtener las conexiones creadas
-                 ResponseModel responseConnections = JsonConvert.DeserializeObject<ResponseModel>(connectionService.getConnectionsForms());
-                 List<ConexionModel> connectionsForms = JsonConvert.DeserializeObject<List<ConexionModel>>(responseConnections.value.ToString());
-
-
-                 // Se obtiene una lista con las conexiones creadas en la BD.
-
-
-                 insertarFormularios(formsVicitrack);
-
-
-                 // Se obtiene la lista con todas las actividades de la api
-                 List<Activity> activiesVicitrack = JsonConvert.DeserializeObject<List<Activity>>(activityService.getActivity());
-
-                 // Foreach de todos las actividades(registros en los formularios)
-                 activiesVicitrack.ForEach(ele => {
-                     DetailActivity activiesDetailVicitrack = JsonConvert.DeserializeObject<DetailActivity>(activityService.getDetailActivity(ele.GUID));
-                     ResponseModel responseFindForm = JsonConvert.DeserializeObject<ResponseModel>(connectionService.findConnectionGUIDForms(activiesDetailVicitrack.FormGUID));
-                     if (responseFindForm.value.ToString() != "[]")
-                     {
-                         activiesDetailVicitrack.Values.ForEach(value =>
-                         {
-                           string Datos =string.Format("Del formulario {0} Campo {1} y Tipo de dato {2}", activiesDetailVicitrack.Title, value.apiId, value.Value.GetType());
-                         });
-                     }
-                 });
-
-
-
-                 // Prueba para convertir un JArray a una lista tipada
-                 //JObject activiesDetailVicitrack = JObject.Parse(activityService.getDetailActivity("e36e60d0-0fb8-4cb9-980a-e628f9524537"));
-                 //var jarr = activiesDetailVicitrack["Values"].Value<JArray>();
-                 //List<FormValues> lst = jarr.ToObject<List<FormValues>>();
-                 //var dasd = jarr[2]["Value"].Value<JArray>();
-                 //List<FormValues> lst2 = dasd.ToObject<List<FormValues>>();
-                 //var dasdsad = lst2[0].Value;
-
-                 // Prueba con Object para saber que puede ser varios tipos de datos
-                 // con GetType puedo saber el tipo de dato
-                 //object pad = 1;
-                 //object das = "dasd";
-                 //object ara = new Array [1, 23, 3];
-                 //Console.WriteLine("{0},{1},{2}",pad.GetType(), das.GetType(), ara.GetType());
-             }
-         }*/
 
 
         public bool main(int idJob)
@@ -776,20 +715,19 @@ namespace AppMinas.Controllers
 
                     string tipoDato = "VARCHAR(MAX)";
                     string nulidad = "NULL";
-                    int ContadorColumnas = 0;
+                    //int ContadorColumnas = 0;
 
                     foreach (var Columns in ConcatenarColumnasStrings(Columnas).Split(','))
                     {
                          tipoDato = "VARCHAR(MAX)";
                          nulidad = "NULL";
-
-                        if (ContadorColumnas == 4 || ContadorColumnas == 5) {
+                        if (Columns == "CreatedOn" || Columns == "UpdatedOn") {
                             tipoDato = "DATETIME";
                         }
                   
                         objMINASBDEntities.AddColumna(NombreTabla, Columns, tipoDato, nulidad);
 
-                        ContadorColumnas++;
+                        //ContadorColumnas++;
                     }
 
 
@@ -984,136 +922,4 @@ namespace AppMinas.Controllers
     }
 }
 
-/* 
- 
-     Respaldo
 
-
-
-     foreach (Activity ele in activiesVicitrack)
-                        {
-                            DetailActivity activiesDetailVicitrack = JsonConvert.DeserializeObject<DetailActivity>(activityService.getDetailActivity(ele.GUID));
-                            ResponseModel responseFindForm = JsonConvert.DeserializeObject<ResponseModel>(connectionService.findConnectionGUIDForms(activiesDetailVicitrack.FormGUID));
-
-                            if (responseFindForm.value.ToString() != "[]")
-                            {
-                                j = 0;
-                                ArrayList Datos = new ArrayList();
-                                foreach(var value in activiesDetailVicitrack.Values)
-                                {
-                                    FormGuid = activiesDetailVicitrack.FormGUID;
-                                    TableName = "F" + FormGuid;
-
-                                    if (!RegistroExiste(TableName, ColumnaActividadExiste, activiesDetailVicitrack.ID.ToString()))
-                                    {
-                                        Existe = false;
-                                    }
-                                    else
-                                    {
-                                        //Existe el registro inv
-
-                                        if (ValidarRegistroActualizar(TableName, activiesDetailVicitrack.UpdatedOn.ToString(), activiesDetailVicitrack.ID.ToString()) && )
-                                        {
-
-
-
-                                        }
-                                        else {
-                                            Actualizar = false;
-                                        }
-
-
-
-
-
-
-                                        //Cierre inv
-
-
-
-
-                                        if (i != 0)
-                                        {
-                                            //Codigo para extaer las cadenas de actualización
-                                            break;
-                                        }
-
-                                        Existe = true;
-                                    }
-
-
-
-                                    if (j == 0)
-                                    {
-
-                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.ID.ToString()));                                  
-                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.Title.ToString()));
-                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.LocationName.ToString()));
-                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.LocationGUID.ToString()));
-                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.CreatedOn.ToString()));
-                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.UpdatedOn.ToString()));
-                                        Datos.Add(ConfigurarDato(activiesDetailVicitrack.UserName.ToString()));
-                                      
-                                    }
-
-                                    //Obtener la estructura de los formulario
-                                    if (i == 0)
-                                    {
-                                        if (!BandIDColumn)
-                                        {
-                                            columnasStringsNames.Add("ID");
-                                            columnasStringsNames.Add("Title");
-                                            columnasStringsNames.Add("LocationName");
-                                            columnasStringsNames.Add("LocationGUID");
-                                            columnasStringsNames.Add("CreatedOn");
-                                            columnasStringsNames.Add("UpdatedOn");
-                                            columnasStringsNames.Add("UserName");
-
-                                            BandIDColumn = true;
-
-                                 
-                                        }
-
-
-
-                                        if (value.Value.GetType().ToString() == "Newtonsoft.Json.Linq.JArray")
-                                        {
-                                            string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
-                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, columnasDetalleNames);
-                                            columnasDetalleNames.Add(ColumnIndividual);
-                                        }
-                                        else
-                                        {
-                                            string ColumnIndividual = EliminarEspacios(value.apiId.ToString());
-                                            ColumnIndividual = BuscarElementArrayList(ColumnIndividual, columnasStringsNames);
-                                            columnasStringsNames.Add(ColumnIndividual);
-                                        }
-
-                                    }
-
-
-                                    //Obtengo los datos de las columnas
-
-
-                                    if (!Existe)
-                                    {
-                                        if (value.Value.GetType().ToString() != "Newtonsoft.Json.Linq.JArray")
-                                        {
-                                            Datos.Add(ConfigurarDato(value.Value.ToString()));
-                                        }
-                                    }
-
-
-                                    //Fin obtener esquema de formulario
-                                    j++;
-                                };
-
-                                if (Datos.Count > 7) // Datos minimos por formulario
-                                {
-                                    DatosColumnas.Add(Datos);
-                                }
-                                i++;
-                            }
-                        };// fin de recorrer las actividades
-     
-     */
