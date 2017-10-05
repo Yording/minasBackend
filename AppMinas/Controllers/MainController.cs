@@ -177,7 +177,7 @@ namespace AppMinas.Controllers
          }*/
 
 
-        public bool main()
+        public bool main(int idJob)
         {
             //Cambio Mateo 2
 
@@ -211,7 +211,7 @@ namespace AppMinas.Controllers
 
                     // Se obtiene una lista con las conexiones creadas en la BD.
                     //List<ConexionModel> connectionsForms = JsonConvert.DeserializeObject<List<ConexionModel>>(responseConnections.value.ToString());
-                    List<ConexionesDisponiblesSincronizarConsultar_Result> connectionsSincronizar = ConexionesDisponiblesSincronizar();
+                    List<ConexionesDisponiblesSincronizarConsultar_Result> connectionsSincronizar = ConexionesDisponiblesSincronizar(idJob);
 
                     // Insertamos los formularios de vicitrack a la tabla Formularios
                     insertarFormularios(formsVicitrack);
@@ -610,7 +610,7 @@ namespace AppMinas.Controllers
             return res;
         }
 
-        public List<Models.ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizar()
+        public List<Models.ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizar(int idJob)
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
             List<Models.ConexionesDisponiblesSincronizarConsultar_Result> lstConexionesDisponible = null;
@@ -619,7 +619,7 @@ namespace AppMinas.Controllers
                 using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
                 {
 
-                    lstConexionesDisponible = objMINASBDEntities.ConexionesDisponiblesSincronizarConsultar().ToList();
+                    lstConexionesDisponible = objMINASBDEntities.ConexionesDisponiblesSincronizarConsultar(idJob).ToList();
 
                     objResultado.Data = lstConexionesDisponible;
 
@@ -952,12 +952,12 @@ namespace AppMinas.Controllers
 
         }
 
-        public bool get()
+        public bool get(int idJob)
         {
             helper = new HelperService();
             authService = new AuthService(helper.getConfig("USER_VICITRACK"), helper.getConfig("PASSWORD_VICITRACK"));
 
-            return main();
+            return main(idJob);
         }
 
     }

@@ -329,7 +329,9 @@
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="ConexionesDisponiblesSincronizarConsultar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ConexionesDisponiblesSincronizarConsultar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idJob" Type="int" Mode="In" />
+        </Function>
         <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ConsultarFormularios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdActividad" Type="varchar" Mode="In" />
@@ -541,7 +543,6 @@
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)" />
           <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
           <FunctionImport Name="ConsultarFormularios">
             <Parameter Name="IdActividad" Mode="In" Type="String" />
@@ -582,6 +583,9 @@
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="UpdateOn" Mode="In" Type="String" />
             <Parameter Name="IdActividad" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)">
+            <Parameter Name="idJob" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="Campo">
@@ -909,19 +913,6 @@
           <Property Type="String" Name="table_derecha" Nullable="true" MaxLength="128" />
           <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
         </ComplexType>
-        <ComplexType Name="ConexionesDisponiblesSincronizarConsultar_Result">
-          <Property Type="Int32" Name="idConexion" Nullable="false" />
-          <Property Type="Int32" Name="idTipoConexion" Nullable="false" />
-          <Property Type="Int32" Name="idFormulario" Nullable="false" />
-          <Property Type="Int32" Name="idJob" Nullable="false" />
-          <Property Type="String" Name="nombreConexion" Nullable="false" MaxLength="25" />
-          <Property Type="String" Name="fuente" Nullable="false" MaxLength="150" />
-          <Property Type="String" Name="contrasenafuente" Nullable="false" MaxLength="25" />
-          <Property Type="Int32" Name="periodoSincronizacion" Nullable="false" />
-          <Property Type="String" Name="descripcion" Nullable="false" MaxLength="255" />
-          <Property Type="DateTime" Name="fechaActualizacion" Nullable="true" Precision="23" />
-          <Property Type="String" Name="GUIDFormulario" Nullable="false" MaxLength="40" />
-        </ComplexType>
         <ComplexType Name="ConsultarDisponibilidadJob_Result">
           <Property Type="Int32" Name="idJob" Nullable="false" />
           <Property Type="Int32" Name="cantidad" Nullable="true" />
@@ -938,6 +929,19 @@
           <Property Type="Int32" Name="id_fk" Nullable="true" />
           <Property Type="String" Name="table_derecha" Nullable="true" MaxLength="128" />
           <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
+        </ComplexType>
+        <ComplexType Name="ConexionesDisponiblesSincronizarConsultar_Result">
+          <Property Type="Int32" Name="idConexion" Nullable="false" />
+          <Property Type="Int32" Name="idTipoConexion" Nullable="false" />
+          <Property Type="Int32" Name="idFormulario" Nullable="false" />
+          <Property Type="Int32" Name="idJob" Nullable="false" />
+          <Property Type="String" Name="nombreConexion" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="fuente" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="contrasenafuente" Nullable="false" MaxLength="25" />
+          <Property Type="Int32" Name="periodoSincronizacion" Nullable="false" />
+          <Property Type="String" Name="descripcion" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="fechaActualizacion" Nullable="true" Precision="23" />
+          <Property Type="String" Name="GUIDFormulario" Nullable="false" MaxLength="40" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1129,23 +1133,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ConexionesDisponiblesSincronizarConsultar" FunctionName="minasDBModel.Store.ConexionesDisponiblesSincronizarConsultar">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result">
-                <ScalarProperty Name="idConexion" ColumnName="idConexion" />
-                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
-                <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
-                <ScalarProperty Name="idJob" ColumnName="idJob" />
-                <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
-                <ScalarProperty Name="fuente" ColumnName="fuente" />
-                <ScalarProperty Name="contrasenafuente" ColumnName="contrasenafuente" />
-                <ScalarProperty Name="periodoSincronizacion" ColumnName="periodoSincronizacion" />
-                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
-                <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
-                <ScalarProperty Name="GUIDFormulario" ColumnName="GUIDFormulario" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ConsultarDisponibilidadJob" FunctionName="minasDBModel.Store.ConsultarDisponibilidadJob">
             <ResultMapping>
               <ComplexTypeMapping TypeName="minasDBModel.ConsultarDisponibilidadJob_Result">
@@ -1179,6 +1166,23 @@
           <FunctionImportMapping FunctionImportName="TablasConsulta" FunctionName="minasDBModel.Store.TablasConsulta" />
           <FunctionImportMapping FunctionImportName="UpdateRegistro" FunctionName="minasDBModel.Store.UpdateRegistro" />
           <FunctionImportMapping FunctionImportName="ValidarRegistroActualizar" FunctionName="minasDBModel.Store.ValidarRegistroActualizar" />
+          <FunctionImportMapping FunctionImportName="ConexionesDisponiblesSincronizarConsultar" FunctionName="minasDBModel.Store.ConexionesDisponiblesSincronizarConsultar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result">
+                <ScalarProperty Name="idConexion" ColumnName="idConexion" />
+                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
+                <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
+                <ScalarProperty Name="idJob" ColumnName="idJob" />
+                <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
+                <ScalarProperty Name="fuente" ColumnName="fuente" />
+                <ScalarProperty Name="contrasenafuente" ColumnName="contrasenafuente" />
+                <ScalarProperty Name="periodoSincronizacion" ColumnName="periodoSincronizacion" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
+                <ScalarProperty Name="GUIDFormulario" ColumnName="GUIDFormulario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -13,7 +13,7 @@ namespace AppMinas.Controllers
     {
 
         // Consulta las conexiones disponibles
-        public Resultado get()
+        public Resultado get(int idJob)
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
 
@@ -22,7 +22,7 @@ namespace AppMinas.Controllers
                 using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
                 {
 
-                    List<Models.ConexionesDisponiblesSincronizarConsultar_Result> lstConexionesDisponible = objMINASBDEntities.ConexionesDisponiblesSincronizarConsultar().ToList();
+                    List<Models.ConexionesDisponiblesSincronizarConsultar_Result> lstConexionesDisponible = objMINASBDEntities.ConexionesDisponiblesSincronizarConsultar(idJob).ToList();
 
                     objResultado.Data = lstConexionesDisponible;
 

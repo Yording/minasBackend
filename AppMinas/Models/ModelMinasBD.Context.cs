@@ -181,11 +181,6 @@ namespace AppMinas.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ColumnaExiste_Result>("ColumnaExiste", nombreTablaParameter, nombreColumnaParameter);
         }
     
-        public virtual ObjectResult<ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizarConsultar()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConexionesDisponiblesSincronizarConsultar_Result>("ConexionesDisponiblesSincronizarConsultar");
-        }
-    
         public virtual ObjectResult<ConsultarDisponibilidadJob_Result> ConsultarDisponibilidadJob()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarDisponibilidadJob_Result>("ConsultarDisponibilidadJob");
@@ -322,6 +317,15 @@ namespace AppMinas.Models
                 new ObjectParameter("IdActividad", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ValidarRegistroActualizar", nombreTablaParameter, updateOnParameter, idActividadParameter);
+        }
+    
+        public virtual ObjectResult<ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizarConsultar(Nullable<int> idJob)
+        {
+            var idJobParameter = idJob.HasValue ?
+                new ObjectParameter("idJob", idJob) :
+                new ObjectParameter("idJob", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConexionesDisponiblesSincronizarConsultar_Result>("ConexionesDisponiblesSincronizarConsultar", idJobParameter);
         }
     }
 }
