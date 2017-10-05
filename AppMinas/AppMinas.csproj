@@ -214,6 +214,7 @@
     <Compile Include="Controllers\DetallesController.cs" />
     <Compile Include="Controllers\FormulariosController.cs" />
     <Compile Include="Controllers\HelperController.cs" />
+    <Compile Include="Controllers\HelperUpController.cs" />
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\LocacionesController.cs" />
     <Compile Include="Controllers\MainController.cs" />

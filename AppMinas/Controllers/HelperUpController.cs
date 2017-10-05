@@ -2,29 +2,18 @@
 using AppMinas.Listas;
 using System;
 using System.Web;
-
-
-
-
-using System;
-using System.Web;
+using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using AppMinas.Models;
-using AppMinas.Listas;
-
-
-
 
 namespace AppMinas.Controllers
 {
-    public class HelperController : ApiController
+    public class HelperUpController : ApiController
     {
 
-        // Consulta las conexiones disponibles
         public Resultado get(int idJob)
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
@@ -67,8 +56,6 @@ namespace AppMinas.Controllers
             }
             return objResultado;
         }
-
-
 
     }
 }
