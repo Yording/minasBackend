@@ -45,6 +45,8 @@ namespace AppMinas.Controllers
             {
                 using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
                 {
+                 
+
                     HttpFileCollection Files = HttpContext.Current.Request.Files;
                   
                         Guid g;
