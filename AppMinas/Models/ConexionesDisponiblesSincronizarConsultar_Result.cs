@@ -18,11 +18,9 @@ namespace AppMinas.Models
         public int idFormulario { get; set; }
         public int idJob { get; set; }
         public string nombreConexion { get; set; }
-        public string fuente { get; set; }
-        public string contrasenafuente { get; set; }
         public int periodoSincronizacion { get; set; }
         public string descripcion { get; set; }
-        public Nullable<System.DateTime> fechaActualizacion { get; set; }
+        public System.DateTime fechaActualizacion { get; set; }
         public string GUIDFormulario { get; set; }
     }
 }

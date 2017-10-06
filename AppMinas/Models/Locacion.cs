@@ -14,12 +14,6 @@ namespace AppMinas.Models
     
     public partial class Locacion
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Locacion()
-        {
-            this.Formulario1 = new HashSet<Formulario1>();
-        }
-    
         public long idLocacion { get; set; }
         public string GUIDLocation { get; set; }
         public string nombre { get; set; }
@@ -37,8 +31,6 @@ namespace AppMinas.Models
         public int idTipoLocacion { get; set; }
         public System.DateTime fechaActualizacion { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Formulario1> Formulario1 { get; set; }
         public virtual TipoLocacion TipoLocacion { get; set; }
     }
 }

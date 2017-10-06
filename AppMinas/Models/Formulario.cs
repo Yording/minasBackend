@@ -18,7 +18,6 @@ namespace AppMinas.Models
         public Formulario()
         {
             this.Conexion = new HashSet<Conexion>();
-            this.Formulario1 = new HashSet<Formulario1>();
         }
     
         public int idFormulario { get; set; }
@@ -28,7 +27,5 @@ namespace AppMinas.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Conexion> Conexion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Formulario1> Formulario1 { get; set; }
     }
 }

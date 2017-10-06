@@ -23,7 +23,6 @@ namespace AppMinas.Controllers
     using AppMinas.Models;
     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
     builder.EntitySet<Usuario>("Usuarios");
-    builder.EntitySet<Formulario1>("Formulario1"); 
     config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
     public class UsuariosController : ODataController
@@ -146,13 +145,6 @@ namespace AppMinas.Controllers
             await db.SaveChangesAsync();
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // GET: odata/Usuarios(5)/Formulario1
-        [EnableQuery]
-        public IQueryable<Formulario1> GetFormulario1([FromODataUri] long key)
-        {
-            return db.Usuario.Where(m => m.idUsuario == key).SelectMany(m => m.Formulario1);
         }
 
         protected override void Dispose(bool disposing)

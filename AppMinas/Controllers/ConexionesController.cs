@@ -23,10 +23,9 @@ namespace AppMinas.Controllers
     using AppMinas.Models;
     ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
     builder.EntitySet<Conexion>("Conexiones");
-    builder.EntitySet<Job>("Job"); 
-    builder.EntitySet<Estructura>("Estructura"); 
     builder.EntitySet<Formulario>("Formulario"); 
     builder.EntitySet<Detalle>("Detalle"); 
+    builder.EntitySet<Job>("Job"); 
     builder.EntitySet<TipoConexion>("TipoConexion"); 
     config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
@@ -152,20 +151,6 @@ namespace AppMinas.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // GET: odata/Conexiones(5)/Job
-        [EnableQuery]
-        public SingleResult<Job> GetJob([FromODataUri] int key)
-        {
-            return SingleResult.Create(db.Conexion.Where(m => m.idConexion == key).Select(m => m.Job));
-        }
-
-        // GET: odata/Conexiones(5)/Estructura
-        [EnableQuery]
-        public IQueryable<Estructura> GetEstructura([FromODataUri] int key)
-        {
-            return db.Conexion.Where(m => m.idConexion == key).SelectMany(m => m.Estructura);
-        }
-
         // GET: odata/Conexiones(5)/Formulario
         [EnableQuery]
         public SingleResult<Formulario> GetFormulario([FromODataUri] int key)
@@ -178,6 +163,13 @@ namespace AppMinas.Controllers
         public IQueryable<Detalle> GetDetalle([FromODataUri] int key)
         {
             return db.Conexion.Where(m => m.idConexion == key).SelectMany(m => m.Detalle);
+        }
+
+        // GET: odata/Conexiones(5)/Job
+        [EnableQuery]
+        public SingleResult<Job> GetJob([FromODataUri] int key)
+        {
+            return SingleResult.Create(db.Conexion.Where(m => m.idConexion == key).Select(m => m.Job));
         }
 
         // GET: odata/Conexiones(5)/TipoConexion

@@ -23,7 +23,7 @@ namespace AppMinas.Models
         public int idTipoDetalle { get; set; }
         public Nullable<System.DateTime> fechaCreacion { get; set; }
     
-        public virtual Conexion Conexion { get; set; }
         public virtual TipoDetalle TipoDetalle { get; set; }
+        public virtual Conexion Conexion { get; set; }
     }
 }

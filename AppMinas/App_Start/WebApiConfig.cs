@@ -30,16 +30,12 @@ namespace AppMinas
             // Web API configuration and services
 
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
-            builder.EntitySet<Campo>("Campos");
             builder.EntitySet<Job>("Jobs");
             builder.EntitySet<Conexion>("Conexiones");
             builder.EntitySet<Detalle>("Detalles");
-            builder.EntitySet<Estructura>("Estructuras");
             builder.EntitySet<Formulario>("Formularios");
-            builder.EntitySet<Formulario1>("Formulario1");
             builder.EntitySet<Locacion>("Locaciones");
             builder.EntitySet<TipoConexion>("TipoConexiones");
-            builder.EntitySet<TipoDato>("TipoDatos");
             builder.EntitySet<TipoDetalle>("TipoDetalles");
             builder.EntitySet<TipoLocacion>("TipoLocaciones");
             builder.EntitySet<Usuario>("Usuarios");

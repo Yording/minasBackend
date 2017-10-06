@@ -27,19 +27,15 @@ namespace AppMinas.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Campo> Campo { get; set; }
-        public virtual DbSet<Conexion> Conexion { get; set; }
         public virtual DbSet<Detalle> Detalle { get; set; }
-        public virtual DbSet<Estructura> Estructura { get; set; }
         public virtual DbSet<Formulario> Formulario { get; set; }
-        public virtual DbSet<Formulario1> Formulario1 { get; set; }
         public virtual DbSet<Job> Job { get; set; }
         public virtual DbSet<Locacion> Locacion { get; set; }
         public virtual DbSet<TipoConexion> TipoConexion { get; set; }
-        public virtual DbSet<TipoDato> TipoDato { get; set; }
         public virtual DbSet<TipoDetalle> TipoDetalle { get; set; }
         public virtual DbSet<TipoLocacion> TipoLocacion { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Conexion> Conexion { get; set; }
     
         public virtual int ActualizarFechaConexion(string guidFormulario)
         {
@@ -48,6 +44,56 @@ namespace AppMinas.Models
                 new ObjectParameter("GuidFormulario", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarFechaConexion", guidFormularioParameter);
+        }
+    
+        public virtual int AddColumna(string nombreTabla, string nombreColumna, string tipoColumna, string obligatorio)
+        {
+            var nombreTablaParameter = nombreTabla != null ?
+                new ObjectParameter("NombreTabla", nombreTabla) :
+                new ObjectParameter("NombreTabla", typeof(string));
+    
+            var nombreColumnaParameter = nombreColumna != null ?
+                new ObjectParameter("NombreColumna", nombreColumna) :
+                new ObjectParameter("NombreColumna", typeof(string));
+    
+            var tipoColumnaParameter = tipoColumna != null ?
+                new ObjectParameter("TipoColumna", tipoColumna) :
+                new ObjectParameter("TipoColumna", typeof(string));
+    
+            var obligatorioParameter = obligatorio != null ?
+                new ObjectParameter("Obligatorio", obligatorio) :
+                new ObjectParameter("Obligatorio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddColumna", nombreTablaParameter, nombreColumnaParameter, tipoColumnaParameter, obligatorioParameter);
+        }
+    
+        public virtual int AddMedia(Nullable<int> idConexion, string urlDetalle, Nullable<int> idTipoDetalle, string idActividad, string descripcion, string nombreActividad)
+        {
+            var idConexionParameter = idConexion.HasValue ?
+                new ObjectParameter("idConexion", idConexion) :
+                new ObjectParameter("idConexion", typeof(int));
+    
+            var urlDetalleParameter = urlDetalle != null ?
+                new ObjectParameter("UrlDetalle", urlDetalle) :
+                new ObjectParameter("UrlDetalle", typeof(string));
+    
+            var idTipoDetalleParameter = idTipoDetalle.HasValue ?
+                new ObjectParameter("idTipoDetalle", idTipoDetalle) :
+                new ObjectParameter("idTipoDetalle", typeof(int));
+    
+            var idActividadParameter = idActividad != null ?
+                new ObjectParameter("idActividad", idActividad) :
+                new ObjectParameter("idActividad", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("descripcion", descripcion) :
+                new ObjectParameter("descripcion", typeof(string));
+    
+            var nombreActividadParameter = nombreActividad != null ?
+                new ObjectParameter("NombreActividad", nombreActividad) :
+                new ObjectParameter("NombreActividad", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddMedia", idConexionParameter, urlDetalleParameter, idTipoDetalleParameter, idActividadParameter, descripcionParameter, nombreActividadParameter);
         }
     
         public virtual int AddRegistro(string nombreTabla, string values, string columns)
@@ -129,6 +175,32 @@ namespace AppMinas.Models
                 new ObjectParameter("NombreColumna", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ColumnaExiste_Result>("ColumnaExiste", nombreTablaParameter, nombreColumnaParameter);
+        }
+    
+        public virtual ObjectResult<ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizarConsultar(Nullable<int> idJob)
+        {
+            var idJobParameter = idJob.HasValue ?
+                new ObjectParameter("idJob", idJob) :
+                new ObjectParameter("idJob", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConexionesDisponiblesSincronizarConsultar_Result>("ConexionesDisponiblesSincronizarConsultar", idJobParameter);
+        }
+    
+        public virtual int ConsultarActividades(string formulario, string fechaInicio, string fechaFin)
+        {
+            var formularioParameter = formulario != null ?
+                new ObjectParameter("Formulario", formulario) :
+                new ObjectParameter("Formulario", typeof(string));
+    
+            var fechaInicioParameter = fechaInicio != null ?
+                new ObjectParameter("FechaInicio", fechaInicio) :
+                new ObjectParameter("FechaInicio", typeof(string));
+    
+            var fechaFinParameter = fechaFin != null ?
+                new ObjectParameter("FechaFin", fechaFin) :
+                new ObjectParameter("FechaFin", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConsultarActividades", formularioParameter, fechaInicioParameter, fechaFinParameter);
         }
     
         public virtual ObjectResult<ConsultarDisponibilidadJob_Result> ConsultarDisponibilidadJob()
@@ -246,82 +318,6 @@ namespace AppMinas.Models
                 new ObjectParameter("IdActividad", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ValidarRegistroActualizar", nombreTablaParameter, updateOnParameter, idActividadParameter);
-        }
-    
-        public virtual ObjectResult<ConexionesDisponiblesSincronizarConsultar_Result> ConexionesDisponiblesSincronizarConsultar(Nullable<int> idJob)
-        {
-            var idJobParameter = idJob.HasValue ?
-                new ObjectParameter("idJob", idJob) :
-                new ObjectParameter("idJob", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConexionesDisponiblesSincronizarConsultar_Result>("ConexionesDisponiblesSincronizarConsultar", idJobParameter);
-        }
-    
-        public virtual int AddColumna(string nombreTabla, string nombreColumna, string tipoColumna, string obligatorio)
-        {
-            var nombreTablaParameter = nombreTabla != null ?
-                new ObjectParameter("NombreTabla", nombreTabla) :
-                new ObjectParameter("NombreTabla", typeof(string));
-    
-            var nombreColumnaParameter = nombreColumna != null ?
-                new ObjectParameter("NombreColumna", nombreColumna) :
-                new ObjectParameter("NombreColumna", typeof(string));
-    
-            var tipoColumnaParameter = tipoColumna != null ?
-                new ObjectParameter("TipoColumna", tipoColumna) :
-                new ObjectParameter("TipoColumna", typeof(string));
-    
-            var obligatorioParameter = obligatorio != null ?
-                new ObjectParameter("Obligatorio", obligatorio) :
-                new ObjectParameter("Obligatorio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddColumna", nombreTablaParameter, nombreColumnaParameter, tipoColumnaParameter, obligatorioParameter);
-        }
-    
-        public virtual int ConsultarActividades(string formulario, string fechaInicio, string fechaFin)
-        {
-            var formularioParameter = formulario != null ?
-                new ObjectParameter("Formulario", formulario) :
-                new ObjectParameter("Formulario", typeof(string));
-    
-            var fechaInicioParameter = fechaInicio != null ?
-                new ObjectParameter("FechaInicio", fechaInicio) :
-                new ObjectParameter("FechaInicio", typeof(string));
-    
-            var fechaFinParameter = fechaFin != null ?
-                new ObjectParameter("FechaFin", fechaFin) :
-                new ObjectParameter("FechaFin", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConsultarActividades", formularioParameter, fechaInicioParameter, fechaFinParameter);
-        }
-    
-        public virtual int AddMedia(Nullable<int> idConexion, string urlDetalle, Nullable<int> idTipoDetalle, string idActividad, string descripcion, string nombreActividad)
-        {
-            var idConexionParameter = idConexion.HasValue ?
-                new ObjectParameter("idConexion", idConexion) :
-                new ObjectParameter("idConexion", typeof(int));
-    
-            var urlDetalleParameter = urlDetalle != null ?
-                new ObjectParameter("UrlDetalle", urlDetalle) :
-                new ObjectParameter("UrlDetalle", typeof(string));
-    
-            var idTipoDetalleParameter = idTipoDetalle.HasValue ?
-                new ObjectParameter("idTipoDetalle", idTipoDetalle) :
-                new ObjectParameter("idTipoDetalle", typeof(int));
-    
-            var idActividadParameter = idActividad != null ?
-                new ObjectParameter("idActividad", idActividad) :
-                new ObjectParameter("idActividad", typeof(string));
-    
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("descripcion", descripcion) :
-                new ObjectParameter("descripcion", typeof(string));
-    
-            var nombreActividadParameter = nombreActividad != null ?
-                new ObjectParameter("NombreActividad", nombreActividad) :
-                new ObjectParameter("NombreActividad", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddMedia", idConexionParameter, urlDetalleParameter, idTipoDetalleParameter, idActividadParameter, descripcionParameter, nombreActividadParameter);
         }
     }
 }

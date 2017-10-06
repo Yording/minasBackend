@@ -235,9 +235,6 @@
     <Compile Include="Listas\FormularioModel.cs" />
     <Compile Include="Listas\ResponseModel.cs" />
     <Compile Include="Listas\TipoConexionModel.cs" />
-    <Compile Include="Models\Campo.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ColumnaClavePrimaria_Result.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
@@ -256,13 +253,7 @@
     <Compile Include="Models\Detalle.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Estructura.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Formulario.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Formulario1.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Job.cs">
@@ -290,9 +281,6 @@
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipoConexion.cs">
-      <DependentUpon>ModelMinasBD.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TipoDato.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipoDetalle.cs">
@@ -362,6 +350,8 @@
     <Content Include="Models\ModelMinasBD.edmx.diagram">
       <DependentUpon>ModelMinasBD.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\seguimientoMinas - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\seguimientoMinas - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

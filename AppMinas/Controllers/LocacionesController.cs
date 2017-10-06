@@ -149,12 +149,6 @@ namespace AppMinas.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // GET: odata/Locaciones(5)/Formulario1
-        [EnableQuery]
-        public IQueryable<Formulario1> GetFormulario1([FromODataUri] long key)
-        {
-            return db.Locacion.Where(m => m.idLocacion == key).SelectMany(m => m.Formulario1);
-        }
 
         // GET: odata/Locaciones(5)/TipoLocacion
         [EnableQuery]
