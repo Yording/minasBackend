@@ -14,7 +14,7 @@ namespace AppMinas.Services
         // Atributos
         private static HelperService helper;
         private static string _api = string.Empty;
-        private static string _apiActivities = "Surveys/Activities?AccessToken={0}&From=2017-06-01&To=2017-06-02";
+        private static string _apiActivities = "Surveys/Activities?AccessToken={0}&From={1:yyyy-MM-dd}&To={2:yyyy-MM-dd}";
         private static string _apiDetailActivities = "Surveys/Activity?AccessToken={0}&GUID={1}&ListValues=true";
         private string _token = string.Empty;
 
@@ -27,7 +27,9 @@ namespace AppMinas.Services
 
         public string getActivity()
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_api + string.Format(_apiActivities, this._token));
+            DateTime FechaInicial = DateTime.Now;
+            DateTime FechaFinal = FechaInicial.AddDays(1);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_api + string.Format(_apiActivities, this._token,FechaInicial,FechaFinal));
             try
             {
                 WebResponse response = request.GetResponse();

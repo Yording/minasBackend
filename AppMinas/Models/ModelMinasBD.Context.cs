@@ -50,35 +50,6 @@ namespace AppMinas.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarFechaConexion", guidFormularioParameter);
         }
     
-        public virtual int AddMedia(Nullable<int> idConexion, string urlDetalle, Nullable<int> idTipoDetalle, Nullable<int> idActividad, string descripcion, string nombreActividad)
-        {
-            var idConexionParameter = idConexion.HasValue ?
-                new ObjectParameter("idConexion", idConexion) :
-                new ObjectParameter("idConexion", typeof(int));
-    
-            var urlDetalleParameter = urlDetalle != null ?
-                new ObjectParameter("UrlDetalle", urlDetalle) :
-                new ObjectParameter("UrlDetalle", typeof(string));
-    
-            var idTipoDetalleParameter = idTipoDetalle.HasValue ?
-                new ObjectParameter("idTipoDetalle", idTipoDetalle) :
-                new ObjectParameter("idTipoDetalle", typeof(int));
-    
-            var idActividadParameter = idActividad.HasValue ?
-                new ObjectParameter("idActividad", idActividad) :
-                new ObjectParameter("idActividad", typeof(int));
-    
-            var descripcionParameter = descripcion != null ?
-                new ObjectParameter("descripcion", descripcion) :
-                new ObjectParameter("descripcion", typeof(string));
-    
-            var nombreActividadParameter = nombreActividad != null ?
-                new ObjectParameter("NombreActividad", nombreActividad) :
-                new ObjectParameter("NombreActividad", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddMedia", idConexionParameter, urlDetalleParameter, idTipoDetalleParameter, idActividadParameter, descripcionParameter, nombreActividadParameter);
-        }
-    
         public virtual int AddRegistro(string nombreTabla, string values, string columns)
         {
             var nombreTablaParameter = nombreTabla != null ?
@@ -322,6 +293,35 @@ namespace AppMinas.Models
                 new ObjectParameter("FechaFin", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConsultarActividades", formularioParameter, fechaInicioParameter, fechaFinParameter);
+        }
+    
+        public virtual int AddMedia(Nullable<int> idConexion, string urlDetalle, Nullable<int> idTipoDetalle, string idActividad, string descripcion, string nombreActividad)
+        {
+            var idConexionParameter = idConexion.HasValue ?
+                new ObjectParameter("idConexion", idConexion) :
+                new ObjectParameter("idConexion", typeof(int));
+    
+            var urlDetalleParameter = urlDetalle != null ?
+                new ObjectParameter("UrlDetalle", urlDetalle) :
+                new ObjectParameter("UrlDetalle", typeof(string));
+    
+            var idTipoDetalleParameter = idTipoDetalle.HasValue ?
+                new ObjectParameter("idTipoDetalle", idTipoDetalle) :
+                new ObjectParameter("idTipoDetalle", typeof(int));
+    
+            var idActividadParameter = idActividad != null ?
+                new ObjectParameter("idActividad", idActividad) :
+                new ObjectParameter("idActividad", typeof(string));
+    
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("descripcion", descripcion) :
+                new ObjectParameter("descripcion", typeof(string));
+    
+            var nombreActividadParameter = nombreActividad != null ?
+                new ObjectParameter("NombreActividad", nombreActividad) :
+                new ObjectParameter("NombreActividad", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddMedia", idConexionParameter, urlDetalleParameter, idTipoDetalleParameter, idActividadParameter, descripcionParameter, nombreActividadParameter);
         }
     }
 }

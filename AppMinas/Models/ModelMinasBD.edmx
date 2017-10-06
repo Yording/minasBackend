@@ -21,13 +21,13 @@
           <Property Name="idConexion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idTipoConexion" Type="int" Nullable="false" />
           <Property Name="idFormulario" Type="int" Nullable="false" />
-          <Property Name="idJob" Type="int" Nullable="false" />
           <Property Name="nombreConexion" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="fuente" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="usuarioFuente" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="contrasenaFuente" Type="varchar" MaxLength="25" Nullable="false" />
           <Property Name="periodoSincronizacion" Type="int" Nullable="false" />
           <Property Name="descripcion" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="idJob" Type="int" Nullable="false" />
           <Property Name="fechaActualizacion" Type="datetime" />
         </EntityType>
         <EntityType Name="Detalle">
@@ -36,11 +36,11 @@
           </Key>
           <Property Name="idDetalle" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="idConexion" Type="int" Nullable="false" />
-          <Property Name="idActividad" Type="varchar" MaxLength="20" />
-          <Property Name="nombreActividad" Type="varchar" MaxLength="50" />
           <Property Name="urlDetalle" Type="varchar" MaxLength="150" Nullable="false" />
-          <Property Name="descripcion" Type="varchar(max)" />
           <Property Name="idTipoDetalle" Type="int" Nullable="false" />
+          <Property Name="idActividad" Type="varchar(max)" />
+          <Property Name="descripcion" Type="varchar(max)" />
+          <Property Name="nombreActividad" Type="varchar" MaxLength="50" />
           <Property Name="fechaCreacion" Type="date" />
         </EntityType>
         <EntityType Name="Estructura">
@@ -156,6 +156,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Conexion_Job">
+          <End Role="Job" Type="Self.Job" Multiplicity="1" />
+          <End Role="Conexion" Type="Self.Conexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="idJob" />
+            </Principal>
+            <Dependent Role="Conexion">
+              <PropertyRef Name="idJob" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ConexionEstructura">
           <End Role="Conexion" Type="Self.Conexion" Multiplicity="1" />
           <End Role="Estructura" Type="Self.Estructura" Multiplicity="*" />
@@ -201,18 +213,6 @@
             </Principal>
             <Dependent Role="Formulario1">
               <PropertyRef Name="idFormulario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_JobConexion">
-          <End Role="Job" Type="Self.Job" Multiplicity="1" />
-          <End Role="Conexion" Type="Self.Conexion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Job">
-              <PropertyRef Name="idJob" />
-            </Principal>
-            <Dependent Role="Conexion">
-              <PropertyRef Name="idJob" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -301,7 +301,7 @@
           <Parameter Name="idConexion" Type="int" Mode="In" />
           <Parameter Name="UrlDetalle" Type="varchar" Mode="In" />
           <Parameter Name="idTipoDetalle" Type="int" Mode="In" />
-          <Parameter Name="idActividad" Type="int" Mode="In" />
+          <Parameter Name="idActividad" Type="varchar" Mode="In" />
           <Parameter Name="descripcion" Type="varchar(max)" Mode="In" />
           <Parameter Name="NombreActividad" Type="varchar" Mode="In" />
         </Function>
@@ -390,6 +390,10 @@
             <End Role="Campo" EntitySet="Campo" />
             <End Role="Estructura" EntitySet="Estructura" />
           </AssociationSet>
+          <AssociationSet Name="FK_Conexion_Job" Association="Self.FK_Conexion_Job">
+            <End Role="Job" EntitySet="Job" />
+            <End Role="Conexion" EntitySet="Conexion" />
+          </AssociationSet>
           <AssociationSet Name="FK_ConexionEstructura" Association="Self.FK_ConexionEstructura">
             <End Role="Conexion" EntitySet="Conexion" />
             <End Role="Estructura" EntitySet="Estructura" />
@@ -405,10 +409,6 @@
           <AssociationSet Name="FK_FormularioFormulario1" Association="Self.FK_FormularioFormulario1">
             <End Role="Formulario" EntitySet="Formulario" />
             <End Role="Formulario1" EntitySet="Formulario1" />
-          </AssociationSet>
-          <AssociationSet Name="FK_JobConexion" Association="Self.FK_JobConexion">
-            <End Role="Job" EntitySet="Job" />
-            <End Role="Conexion" EntitySet="Conexion" />
           </AssociationSet>
           <AssociationSet Name="FK_LocacionFormulario1" Association="Self.FK_LocacionFormulario1">
             <End Role="Locacion" EntitySet="Locacion" />
@@ -504,14 +504,6 @@
           <FunctionImport Name="ActualizarFechaConexion">
           <Parameter Name="GuidFormulario" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AddMedia">
-            <Parameter Name="idConexion" Mode="In" Type="Int32" />
-            <Parameter Name="UrlDetalle" Mode="In" Type="String" />
-            <Parameter Name="idTipoDetalle" Mode="In" Type="Int32" />
-            <Parameter Name="idActividad" Mode="In" Type="Int32" />
-            <Parameter Name="descripcion" Mode="In" Type="String" />
-            <Parameter Name="NombreActividad" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="AddRegistro">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="Values" Mode="In" Type="String" />
@@ -585,6 +577,14 @@
             <Parameter Name="FechaInicio" Mode="In" Type="String" />
             <Parameter Name="FechaFin" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AddMedia">
+            <Parameter Name="idConexion" Mode="In" Type="Int32" />
+            <Parameter Name="UrlDetalle" Mode="In" Type="String" />
+            <Parameter Name="idTipoDetalle" Mode="In" Type="Int32" />
+            <Parameter Name="idActividad" Mode="In" Type="String" />
+            <Parameter Name="descripcion" Mode="In" Type="String" />
+            <Parameter Name="NombreActividad" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Campo">
           <Key>
@@ -624,7 +624,7 @@
           </Key>
           <Property Name="idDetalle" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="idConexion" Type="Int32" Nullable="false" />
-          <Property Name="idActividad" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="idActividad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="nombreActividad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="urlDetalle" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -1100,7 +1100,6 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ActualizarFechaConexion" FunctionName="minasDBModel.Store.ActualizarFechaConexion" />
-          <FunctionImportMapping FunctionImportName="AddMedia" FunctionName="minasDBModel.Store.AddMedia" />
           <FunctionImportMapping FunctionImportName="AddRegistro" FunctionName="minasDBModel.Store.AddRegistro" />
           <FunctionImportMapping FunctionImportName="AddRegla" FunctionName="minasDBModel.Store.AddRegla" />
           <FunctionImportMapping FunctionImportName="ChangeNameColumn" FunctionName="minasDBModel.Store.ChangeNameColumn" />
@@ -1181,6 +1180,7 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AddColumna" FunctionName="minasDBModel.Store.AddColumna" />
           <FunctionImportMapping FunctionImportName="ConsultarActividades" FunctionName="minasDBModel.Store.ConsultarActividades" />
+          <FunctionImportMapping FunctionImportName="AddMedia" FunctionName="minasDBModel.Store.AddMedia" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

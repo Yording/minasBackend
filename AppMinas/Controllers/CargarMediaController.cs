@@ -17,7 +17,7 @@ namespace AppMinas.Controllers
         private struct _Constantes
         {
            
-            public const string Media = "Media";
+            public const string Media = "files[]";
             public const string idConexion = "idConexion";
             //public const string UrlDetalle = "UrlDetalle";
             public const string idTipoDetalle = "idTipoDetalle";
@@ -27,7 +27,7 @@ namespace AppMinas.Controllers
 
         }
 
-        public Resultado Post(Multimedia multimedia)
+        public Resultado Post()
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
 
@@ -36,8 +36,8 @@ namespace AppMinas.Controllers
             string Media = FormValue[_Constantes.Media];
             int idConexion = Convert.ToInt32(FormValue[_Constantes.idConexion]);
             //string UrlDetalle = FormValue[_Constantes.UrlDetalle];
-            int idTipoDetalle = Convert.ToInt32(FormValue[_Constantes.idActividad]);
-            int idActividad = Convert.ToInt32(FormValue[_Constantes.idActividad]);
+            int idTipoDetalle = Convert.ToInt32(FormValue[_Constantes.idTipoDetalle]);
+            string idActividad = FormValue[_Constantes.idActividad];
             string Descripcion = FormValue[_Constantes.Descripcion];
             string NombreActividad = FormValue[_Constantes.NombreActividad];
 
@@ -46,29 +46,35 @@ namespace AppMinas.Controllers
                 using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
                 {
                     HttpFileCollection Files = HttpContext.Current.Request.Files;
-                  
+                    var i = 0;
+                    foreach (var file in Files)
+                    {
                         Guid g;
                         g = Guid.NewGuid();
                         string NombreArchivo = "M" + g.ToString();
-                       if (Files.AllKeys.Any(x => x == _Constantes.Media))
+                        if (file.ToString() == string.Format("files[{0}]", i))
                         {
 
-                       
-                            string NombreArchivoReal = Files[_Constantes.Media].FileName;
+
+                            string NombreArchivoReal = Files[string.Format("files[{0}]",i)].FileName;
                             string[] ArrayName = NombreArchivoReal.Split('.');
 
 
-                            Media = UtilidadesAzure.GuardarArchivo("mycontainer", ArrayName[0] + "-" + NombreArchivo + "-" + _Constantes.Media, Files[_Constantes.Media]); //La urlDetalle
-                            objMINASBDEntities.AddMedia(idConexion, Media, idTipoDetalle, idActividad, Descripcion, NombreActividad); 
+                            Media = UtilidadesAzure.GuardarArchivo("mycontainer", ArrayName[0] + "-" + NombreArchivo, Files[string.Format("files[{0}]", i)]); //La urlDetalle
+                            objMINASBDEntities.AddMedia(idConexion, Media, idTipoDetalle, idActividad, Descripcion, NombreActividad);
 
-                        objResultado.Mensaje = "Se inserto el contenido multimedia correctamente";
+                            objResultado.Mensaje = "Se inserto el contenido multimedia correctamente";
                             objResultado.TipoResultado = true;
+                            i++;
                         }
                         else
-                       
+
                             objResultado.Mensaje = "No se ha trasmitido el archivo al servidor";
-                            objResultado.TipoResultado = false;
-                        }
+                        objResultado.TipoResultado = false;
+                    }
+                }
+                  
+                        
 
             }
             catch (Exception ex)

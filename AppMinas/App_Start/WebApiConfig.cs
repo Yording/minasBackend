@@ -13,7 +13,7 @@ namespace AppMinas
     {
         public static void Register(HttpConfiguration config)
         {
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var cors = new EnableCorsAttribute("http://localhost:4200", "*", "*");
             config.EnableCors(cors);
             // Configuración y servicios de API web
 

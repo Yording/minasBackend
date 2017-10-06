@@ -11,5 +11,6 @@ namespace AppMinas.Listas
         public int idConexion { get; set; }
         public int idTipoDetalle { get; set; }
         public string descripcion { get; set; }
+        public string idActividad { get; set; }
     }
 }
