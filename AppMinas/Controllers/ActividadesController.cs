@@ -26,9 +26,16 @@ namespace AppMinas.Controllers
                 using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
                 {
 
-                    objResultado.Data =  objMINASBDEntities.ConsultarActividades(NombreTabla, Fechainicio, FechaFin);
 
-                   
+                    List<Models.TablaExiste_Result> lstTablaExiste = objMINASBDEntities.TablaExiste(NombreTabla).ToList();
+
+                    if (lstTablaExiste.Count() > 0) {
+
+                        objMINASBDEntities.ConsultarActividades(NombreTabla, Fechainicio, FechaFin);
+                        List<Models.ConsultarActividadesTemporales_Result> LstActividades = objMINASBDEntities.ConsultarActividadesTemporales().ToList();
+                        objResultado.Data = LstActividades;
+
+                    }
 
                 }
             }

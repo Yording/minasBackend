@@ -221,6 +221,7 @@
           <Parameter Name="FechaInicio" Type="varchar" Mode="In" />
           <Parameter Name="FechaFin" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="ConsultarActividadesTemporales" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="ConsultarDisponibilidadJob" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="CrearTabla" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="nvarchar" Mode="In" />
@@ -356,11 +357,6 @@
           <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)">
           <Parameter Name="idJob" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="ConsultarActividades">
-            <Parameter Name="Formulario" Mode="In" Type="String" />
-            <Parameter Name="FechaInicio" Mode="In" Type="String" />
-            <Parameter Name="FechaFin" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
           <FunctionImport Name="CrearTabla">
           <Parameter Name="NombreTabla" Mode="In" Type="String" />
@@ -413,6 +409,12 @@
             <End Role="TipoConexion" EntitySet="TipoConexion" />
             <End Role="Conexion" EntitySet="Conexion" />
           </AssociationSet>
+          <FunctionImport Name="ConsultarActividades">
+            <Parameter Name="Formulario" Mode="In" Type="String" />
+            <Parameter Name="FechaInicio" Mode="In" Type="String" />
+            <Parameter Name="FechaFin" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarActividadesTemporales" ReturnType="Collection(minasDBModel.ConsultarActividadesTemporales_Result)" />
         </EntityContainer>
         <EntityType Name="Detalle">
           <Key>
@@ -639,6 +641,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="ConsultarActividadesTemporales_Result">
+          <Property Type="String" Name="IdActividad" Nullable="true" />
+          <Property Type="String" Name="NombreFormulario" Nullable="true" />
+          <Property Type="String" Name="LocationName" Nullable="false" />
+          <Property Type="String" Name="LocationGUID" Nullable="true" />
+          <Property Type="String" Name="FechaCreacion" Nullable="true" />
+          <Property Type="String" Name="FechaActualizacion" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -782,7 +793,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ConsultarActividades" FunctionName="minasDBModel.Store.ConsultarActividades" />
           <FunctionImportMapping FunctionImportName="ConsultarDisponibilidadJob" FunctionName="minasDBModel.Store.ConsultarDisponibilidadJob">
             <ResultMapping>
               <ComplexTypeMapping TypeName="minasDBModel.ConsultarDisponibilidadJob_Result">
@@ -829,6 +839,20 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ConsultarActividades" FunctionName="minasDBModel.Store.ConsultarActividades" />
+          <FunctionImportMapping FunctionImportName="ConsultarActividadesTemporales" FunctionName="minasDBModel.Store.ConsultarActividadesTemporales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="minasDBModel.ConsultarActividadesTemporales_Result">
+                <ScalarProperty Name="IdActividad" ColumnName="IdActividad" />
+                <ScalarProperty Name="NombreFormulario" ColumnName="NombreFormulario" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationGUID" ColumnName="LocationGUID" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -247,6 +247,9 @@
     <Compile Include="Models\ConexionesDisponiblesSincronizarConsultar_Result.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConsultarActividadesTemporales_Result.cs">
+      <DependentUpon>ModelMinasBD.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConsultarDisponibilidadJob_Result.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
