@@ -156,6 +156,17 @@ IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'Locacion')
 			CONSTRAINT PK_Locacion PRIMARY KEY (idLocacion),
 			CONSTRAINT FK_TipoLocacion FOREIGN KEY (idTipoLocacion) REFERENCES TipoLocacion(idTipoLocacion))
 
+-----------------------------------------------------------------------------------------------------------------------------------------
+CREATE TABLE [dbo].[physical_table](
+	[IdActividad] [varchar](max) NULL,
+	[NombreFormulario] [varchar](max) NULL,
+	[LocationName] [varchar](max) NOT NULL,
+	[LocationGUID] [varchar](max) NULL,
+	[FechaCreacion] [varchar](max) NULL,
+	[FechaActualizacion] [varchar](max) NULL,
+	[Usuario] [varchar](max) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
 
  ----------------------------------------------------Procedimientos almacenadois------------------------------------------------------
 CREATE PROCEDURE [dbo].[ActualizarFechaConexion]
@@ -334,24 +345,43 @@ CREATE PROCEDURE [dbo].[ConsultarActividades]
 	 @FechaFin  varchar(25)
 AS
 BEGIN
-DECLARE @StringSQL NVARCHAR(MAX);
-		SET @StringSQL = RTRIM('SELECT 
+		DECLARE @StringSQL NVARCHAR(MAX);
+		SET @StringSQL = RTRIM('	
+							INSERT INTO physical_table 
+							
+							
+							SELECT 
 
 							ID as IdActividad,
-							Title as NombreFormulario, 
+						    Title as NombreFormulario, 
 							LocationName,
 							LocationGUID, 
 							CreatedOn as FechaCreacion, 
 							UpdatedOn as FechaActualizacion, 
 							UserName as Usuario
-	
-							FROM ' + @Formulario + ' WHERE (CONVERT (date, CreatedOn) >=  CONVERT (date,'  + '''' + @FechaInicio + ''''+ ')  AND CONVERT (date, CreatedOn) <= CONVERT (date,'+ '''' + @FechaFin + ''''+'))'
-									    
-							
+							FROM ' + @Formulario + ' WHERE (CONVERT (date, CreatedOn) >=  CONVERT (date,'  + '''' + @FechaInicio + ''''+ ')  AND CONVERT (date, CreatedOn) <= CONVERT (date,'+ '''' + @FechaFin + ''''+'))'								   							
 							)
 							EXEC (@StringSQL)
 END
 GO
+-------------------------------------------------------------------------------------------------------------------------------
+Create PROCEDURE [dbo].[ConsultarActividadesTemporales]	 
+AS
+BEGIN
+
+    Select
+
+		 IdActividad,
+		 NombreFormulario, 
+		 LocationName,
+		 LocationGUID, 
+		 FechaCreacion, 
+		 FechaActualizacion, 
+		 Usuario 		 
+		 from  physical_table
+		 DELETE physical_table
+END
+GO 
 ----------------------------------------------------------------------------------------------------------------------------
 CREATE PROCEDURE [dbo].[ConsultarDisponibilidadJob]
 
