@@ -11,9 +11,10 @@ using System.Web.Http;
 
 namespace AppMinas.Controllers
 {
+    [RoutePrefix("api/HelperUp")]
     public class HelperUpController : ApiController
     {
-
+        [HttpGet, Route("{idJob:int}")]
         public Resultado get(int idJob)
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };

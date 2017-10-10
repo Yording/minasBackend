@@ -11,6 +11,7 @@ using System.Web.Http;
 
 namespace AppMinas.Controllers
 {
+    [RoutePrefix("api/CargarMedia")]
     public class CargarMediaController : ApiController
     {
 
@@ -27,6 +28,7 @@ namespace AppMinas.Controllers
 
         }
 
+        [HttpPost, Route("")]
         public Resultado Post()
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };

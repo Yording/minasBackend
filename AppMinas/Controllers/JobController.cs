@@ -9,10 +9,11 @@ using AppMinas.Listas;
 
 namespace AppMinas.Controllers
 {
+    [RoutePrefix("api/Job")]
     public class JobController : ApiController
     {
 
-
+        [HttpGet, Route("")]
         public Resultado get()
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };

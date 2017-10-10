@@ -14,9 +14,10 @@ using System.Collections.Generic;
 
 namespace AppMinas.Controllers
 {
+    [RoutePrefix("api/Actividades")]
     public class ActividadesController : ApiController
     {
-
+        [HttpGet, Route("")]
         public Resultado get(string NombreTabla, string Fechainicio, string FechaFin)
         {
             Listas.Resultado objResultado = new Listas.Resultado() { Mensaje = "", TipoResultado = true };
