@@ -33,8 +33,9 @@ namespace AppMinas.Services
 
         public string getActivity()
         {
-            DateTime FechaInicial = DateTime.Now;
+            DateTime FechaInicial = getLocalDate();
             DateTime FechaFinal = FechaInicial.AddDays(1);
+            string prueba = _api + string.Format(_apiActivities, this._token, FechaInicial, FechaFinal);
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_api + string.Format(_apiActivities, this._token,FechaInicial,FechaFinal));
             try
             {
@@ -83,7 +84,7 @@ namespace AppMinas.Services
             }
         }
 
-        public string getLocalDate()
+        public DateTime getLocalDate()
         {
             List<DateTime?> Fecha = new List<DateTime?>();
           try
@@ -95,9 +96,9 @@ namespace AppMinas.Services
             }
             catch (Exception ex)
             {
-                return ex.Message;
+               // return ex.Message;
             }
-            return Convert.ToString(Fecha[0].Value);
+            return Fecha[0].Value;
 
         }
     }

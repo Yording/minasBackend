@@ -125,7 +125,6 @@ namespace AppMinas.Controllers
             //Cambio Mateo 2
             using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
             {
-                objMINASBDEntities.Database.CommandTimeout = 900000;
                 Token authentication = JsonConvert.DeserializeObject<Token>(authService.getAuthentication());
                 if (authentication.status == "OK")
                 {
@@ -316,19 +315,6 @@ namespace AppMinas.Controllers
 
                                             }
                                         }
-                                        //else
-                                        //{
-                                        //    string ColumnIndividual = EliminarEspaciosAcentos(value.apiId.ToString());
-                                        //    //TODO------Se elimina el parametro columnasStringsNames y se agrega DictTablasColumnas[TableName]
-                                        //    ColumnIndividual = BuscarElementArrayList(ColumnIndividual, DictTablasColumnas[TableName]);
-                                        //    //columnasStringsNames.Add(ColumnIndividual); //TODO-----Esta linea ya no es necesaria
-                                        //    DictTablasColumnas[TableName].Add(ColumnIndividual);
-                                        //}
-                                        
-
-
-
-                                        
 
                                         //Obtengo los datos de las columnas
                                         if (!Existe)
@@ -758,7 +744,6 @@ namespace AppMinas.Controllers
 
             using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
             {
-                objMINASBDEntities.Database.CommandTimeout = 0;
                 foreach (ArrayList DatosmodificarBD in Datos)
                 {
 
@@ -776,7 +761,6 @@ namespace AppMinas.Controllers
         {
             using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
             {
-                objMINASBDEntities.Database.CommandTimeout = 0;
                 List<Models.TablaExiste_Result> lstTablaExiste = objMINASBDEntities.TablaExiste(NombreTabla).ToList();
 
                 if (lstTablaExiste.Count == 0)
@@ -1000,8 +984,6 @@ namespace AppMinas.Controllers
         {
             helper = new HelperService();
             authService = new AuthService(helper.getConfig("USER_VICITRACK"), helper.getConfig("PASSWORD_VICITRACK"));
-            //string pruueba = ConfigurarDato("hola'dasd ' dasdas 123'433.434");
-            //string nueva = EliminarEspaciosAcentos("Mañana será un buen d+ía@./:?$%&|~~¡");
             return main(idJob);
         }
 
