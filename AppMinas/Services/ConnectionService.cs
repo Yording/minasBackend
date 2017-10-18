@@ -55,7 +55,7 @@ namespace AppMinas.Services
 
         public string getConnectionsForms()
         {
-            return _createRequest(_apiOdata + "/Conexiones?$expand=Formulario,TipoConexion&$filter=TipoConexion/nombreTipoConexion eq 'Formulario'");
+            return _createRequest(_apiOdata + "/Conexiones?$expand=Formulario");
         }
 
         public string findConnectionGUIDForms(string GUID)

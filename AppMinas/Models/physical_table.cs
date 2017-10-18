@@ -12,18 +12,14 @@ namespace AppMinas.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Detalle
+    public partial class physical_table
     {
-        public long idDetalle { get; set; }
-        public int idConexion { get; set; }
-        public string idActividad { get; set; }
-        public string nombreActividad { get; set; }
-        public string urlDetalle { get; set; }
-        public string descripcion { get; set; }
-        public int idTipoDetalle { get; set; }
-        public Nullable<System.DateTime> fechaCreacion { get; set; }
-    
-        public virtual Conexion Conexion { get; set; }
-        public virtual TipoDetalle TipoDetalle { get; set; }
+        public string IdActividad { get; set; }
+        public string NombreFormulario { get; set; }
+        public string LocationName { get; set; }
+        public string LocationGUID { get; set; }
+        public string FechaCreacion { get; set; }
+        public string FechaActualizacion { get; set; }
+        public string Usuario { get; set; }
     }
 }

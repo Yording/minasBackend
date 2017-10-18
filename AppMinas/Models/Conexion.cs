@@ -21,7 +21,6 @@ namespace AppMinas.Models
         }
     
         public int idConexion { get; set; }
-        public int idTipoConexion { get; set; }
         public int idFormulario { get; set; }
         public int idJob { get; set; }
         public string nombreConexion { get; set; }
@@ -33,6 +32,5 @@ namespace AppMinas.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Detalle> Detalle { get; set; }
         public virtual Job Job { get; set; }
-        public virtual TipoConexion TipoConexion { get; set; }
     }
 }

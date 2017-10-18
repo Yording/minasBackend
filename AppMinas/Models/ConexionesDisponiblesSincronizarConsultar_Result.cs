@@ -14,13 +14,12 @@ namespace AppMinas.Models
     public partial class ConexionesDisponiblesSincronizarConsultar_Result
     {
         public int idConexion { get; set; }
-        public int idTipoConexion { get; set; }
         public int idFormulario { get; set; }
         public int idJob { get; set; }
         public string nombreConexion { get; set; }
         public int periodoSincronizacion { get; set; }
         public string descripcion { get; set; }
-        public System.DateTime fechaActualizacion { get; set; }
+        public Nullable<System.DateTime> fechaActualizacion { get; set; }
         public string GUIDFormulario { get; set; }
     }
 }

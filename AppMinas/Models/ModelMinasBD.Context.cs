@@ -27,15 +27,15 @@ namespace AppMinas.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Conexion> Conexion { get; set; }
         public virtual DbSet<Detalle> Detalle { get; set; }
         public virtual DbSet<Formulario> Formulario { get; set; }
         public virtual DbSet<Job> Job { get; set; }
         public virtual DbSet<Locacion> Locacion { get; set; }
-        public virtual DbSet<TipoConexion> TipoConexion { get; set; }
         public virtual DbSet<TipoDetalle> TipoDetalle { get; set; }
         public virtual DbSet<TipoLocacion> TipoLocacion { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-        public virtual DbSet<Conexion> Conexion { get; set; }
+        public virtual DbSet<physical_table> physical_table { get; set; }
     
         public virtual int ActualizarFechaConexion(string guidFormulario)
         {
@@ -186,6 +186,28 @@ namespace AppMinas.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConexionesDisponiblesSincronizarConsultar_Result>("ConexionesDisponiblesSincronizarConsultar", idJobParameter);
         }
     
+        public virtual int ConsultarActividades(string formulario, string fechaInicio, string fechaFin)
+        {
+            var formularioParameter = formulario != null ?
+                new ObjectParameter("Formulario", formulario) :
+                new ObjectParameter("Formulario", typeof(string));
+    
+            var fechaInicioParameter = fechaInicio != null ?
+                new ObjectParameter("FechaInicio", fechaInicio) :
+                new ObjectParameter("FechaInicio", typeof(string));
+    
+            var fechaFinParameter = fechaFin != null ?
+                new ObjectParameter("FechaFin", fechaFin) :
+                new ObjectParameter("FechaFin", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConsultarActividades", formularioParameter, fechaInicioParameter, fechaFinParameter);
+        }
+    
+        public virtual ObjectResult<ConsultarActividadesTemporales_Result> ConsultarActividadesTemporales()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarActividadesTemporales_Result>("ConsultarActividadesTemporales");
+        }
+    
         public virtual ObjectResult<ConsultarDisponibilidadJob_Result> ConsultarDisponibilidadJob()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarDisponibilidadJob_Result>("ConsultarDisponibilidadJob");
@@ -301,28 +323,6 @@ namespace AppMinas.Models
                 new ObjectParameter("IdActividad", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ValidarRegistroActualizar", nombreTablaParameter, updateOnParameter, idActividadParameter);
-        }
-    
-        public virtual int ConsultarActividades(string formulario, string fechaInicio, string fechaFin)
-        {
-            var formularioParameter = formulario != null ?
-                new ObjectParameter("Formulario", formulario) :
-                new ObjectParameter("Formulario", typeof(string));
-    
-            var fechaInicioParameter = fechaInicio != null ?
-                new ObjectParameter("FechaInicio", fechaInicio) :
-                new ObjectParameter("FechaInicio", typeof(string));
-    
-            var fechaFinParameter = fechaFin != null ?
-                new ObjectParameter("FechaFin", fechaFin) :
-                new ObjectParameter("FechaFin", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ConsultarActividades", formularioParameter, fechaInicioParameter, fechaFinParameter);
-        }
-    
-        public virtual ObjectResult<ConsultarActividadesTemporales_Result> ConsultarActividadesTemporales()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarActividadesTemporales_Result>("ConsultarActividadesTemporales");
         }
     }
 }

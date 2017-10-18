@@ -26,7 +26,6 @@ namespace AppMinas.Controllers
     builder.EntitySet<Formulario>("Formulario"); 
     builder.EntitySet<Detalle>("Detalle"); 
     builder.EntitySet<Job>("Job"); 
-    builder.EntitySet<TipoConexion>("TipoConexion"); 
     config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
     */
     public class ConexionesController : ODataController
@@ -170,13 +169,6 @@ namespace AppMinas.Controllers
         public SingleResult<Job> GetJob([FromODataUri] int key)
         {
             return SingleResult.Create(db.Conexion.Where(m => m.idConexion == key).Select(m => m.Job));
-        }
-
-        // GET: odata/Conexiones(5)/TipoConexion
-        [EnableQuery]
-        public SingleResult<TipoConexion> GetTipoConexion([FromODataUri] int key)
-        {
-            return SingleResult.Create(db.Conexion.Where(m => m.idConexion == key).Select(m => m.TipoConexion));
         }
 
         protected override void Dispose(bool disposing)

@@ -35,7 +35,6 @@ namespace AppMinas
             builder.EntitySet<Detalle>("Detalles");
             builder.EntitySet<Formulario>("Formularios");
             builder.EntitySet<Locacion>("Locaciones");
-            builder.EntitySet<TipoConexion>("TipoConexiones");
             builder.EntitySet<TipoDetalle>("TipoDetalles");
             builder.EntitySet<TipoLocacion>("TipoLocaciones");
             builder.EntitySet<Usuario>("Usuarios");

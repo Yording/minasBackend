@@ -218,7 +218,6 @@
     <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\LocacionesController.cs" />
     <Compile Include="Controllers\MainController.cs" />
-    <Compile Include="Controllers\TipoConexionesController.cs" />
     <Compile Include="Controllers\TipoDetallesController.cs" />
     <Compile Include="Controllers\TipoLocacionesController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
@@ -280,10 +279,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ModelMinasBD.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\TablaExiste_Result.cs">
+    <Compile Include="Models\physical_table.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TipoConexion.cs">
+    <Compile Include="Models\TablaExiste_Result.cs">
       <DependentUpon>ModelMinasBD.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipoDetalle.cs">
@@ -353,8 +352,8 @@
     <Content Include="Models\ModelMinasBD.edmx.diagram">
       <DependentUpon>ModelMinasBD.edmx</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\seguimientoMinas - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\seguimientoMinas - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\SeguimientoMinasDlloBK - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\SeguimientoMinasDlloBK - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -10,7 +10,6 @@
             <PropertyRef Name="idConexion" />
           </Key>
           <Property Name="idConexion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="idTipoConexion" Type="int" Nullable="false" />
           <Property Name="idFormulario" Type="int" Nullable="false" />
           <Property Name="idJob" Type="int" Nullable="false" />
           <Property Name="nombreConexion" Type="varchar" MaxLength="120" Nullable="false" />
@@ -68,12 +67,19 @@
           <Property Name="idTipoLocacion" Type="int" Nullable="false" />
           <Property Name="fechaActualizacion" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="TipoConexion">
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'BDMinasDesarrollo.dbo.physical_table' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="physical_table">
           <Key>
-            <PropertyRef Name="idTipoConexion" />
+            <PropertyRef Name="LocationName" />
           </Key>
-          <Property Name="idTipoConexion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nombreTipoConexion" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IdActividad" Type="varchar(max)" />
+          <Property Name="NombreFormulario" Type="varchar(max)" />
+          <Property Name="LocationName" Type="varchar(max)" Nullable="false" />
+          <Property Name="LocationGUID" Type="varchar(max)" />
+          <Property Name="FechaCreacion" Type="varchar(max)" />
+          <Property Name="FechaActualizacion" Type="varchar(max)" />
+          <Property Name="Usuario" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="TipoDetalle">
           <Key>
@@ -133,18 +139,6 @@
             </Principal>
             <Dependent Role="Conexion">
               <PropertyRef Name="idJob" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TipoConexion">
-          <End Role="TipoConexion" Type="Self.TipoConexion" Multiplicity="1" />
-          <End Role="Conexion" Type="Self.Conexion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TipoConexion">
-              <PropertyRef Name="idTipoConexion" />
-            </Principal>
-            <Dependent Role="Conexion">
-              <PropertyRef Name="idTipoConexion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -263,10 +257,20 @@
           <EntitySet Name="Formulario" EntityType="Self.Formulario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Job" EntityType="Self.Job" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Locacion" EntityType="Self.Locacion" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TipoConexion" EntityType="Self.TipoConexion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoDetalle" EntityType="Self.TipoDetalle" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoLocacion" EntityType="Self.TipoLocacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="physical_table" EntityType="Self.physical_table" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [physical_table].[IdActividad] AS [IdActividad], 
+    [physical_table].[NombreFormulario] AS [NombreFormulario], 
+    [physical_table].[LocationName] AS [LocationName], 
+    [physical_table].[LocationGUID] AS [LocationGUID], 
+    [physical_table].[FechaCreacion] AS [FechaCreacion], 
+    [physical_table].[FechaActualizacion] AS [FechaActualizacion], 
+    [physical_table].[Usuario] AS [Usuario]
+    FROM [dbo].[physical_table] AS [physical_table]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_FormularioConexion" Association="Self.FK_FormularioConexion">
             <End Role="Formulario" EntitySet="Formulario" />
             <End Role="Conexion" EntitySet="Conexion" />
@@ -277,10 +281,6 @@
           </AssociationSet>
           <AssociationSet Name="FK_JobConexion" Association="Self.FK_JobConexion">
             <End Role="Job" EntitySet="Job" />
-            <End Role="Conexion" EntitySet="Conexion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TipoConexion" Association="Self.FK_TipoConexion">
-            <End Role="TipoConexion" EntitySet="TipoConexion" />
             <End Role="Conexion" EntitySet="Conexion" />
           </AssociationSet>
           <AssociationSet Name="FK_TipoDetalle" Association="Self.FK_TipoDetalle">
@@ -297,14 +297,27 @@
     <edmx:ConceptualModels>
       <Schema Namespace="minasDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="minasDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Conexion" EntityType="minasDBModel.Conexion" />
           <EntitySet Name="Detalle" EntityType="minasDBModel.Detalle" />
           <EntitySet Name="Formulario" EntityType="minasDBModel.Formulario" />
           <EntitySet Name="Job" EntityType="minasDBModel.Job" />
           <EntitySet Name="Locacion" EntityType="minasDBModel.Locacion" />
-          <EntitySet Name="TipoConexion" EntityType="minasDBModel.TipoConexion" />
           <EntitySet Name="TipoDetalle" EntityType="minasDBModel.TipoDetalle" />
           <EntitySet Name="TipoLocacion" EntityType="minasDBModel.TipoLocacion" />
           <EntitySet Name="Usuario" EntityType="minasDBModel.Usuario" />
+          <EntitySet Name="physical_table" EntityType="minasDBModel.physical_table" />
+          <AssociationSet Name="FK_FormularioConexion" Association="minasDBModel.FK_FormularioConexion">
+            <End Role="Formulario" EntitySet="Formulario" />
+            <End Role="Conexion" EntitySet="Conexion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FormularioDetalle" Association="minasDBModel.FK_FormularioDetalle">
+            <End Role="Conexion" EntitySet="Conexion" />
+            <End Role="Detalle" EntitySet="Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobConexion" Association="minasDBModel.FK_JobConexion">
+            <End Role="Job" EntitySet="Job" />
+            <End Role="Conexion" EntitySet="Conexion" />
+          </AssociationSet>
           <AssociationSet Name="FK_TipoDetalle" Association="minasDBModel.FK_TipoDetalle">
             <End Role="TipoDetalle" EntitySet="TipoDetalle" />
             <End Role="Detalle" EntitySet="Detalle" />
@@ -314,7 +327,7 @@
             <End Role="Locacion" EntitySet="Locacion" />
           </AssociationSet>
           <FunctionImport Name="ActualizarFechaConexion">
-          <Parameter Name="GuidFormulario" Mode="In" Type="String" />
+            <Parameter Name="GuidFormulario" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AddColumna">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
@@ -355,11 +368,17 @@
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConexionesDisponiblesSincronizarConsultar" ReturnType="Collection(minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result)">
-          <Parameter Name="idJob" Mode="In" Type="Int32" />
+            <Parameter Name="idJob" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="ConsultarActividades">
+            <Parameter Name="Formulario" Mode="In" Type="String" />
+            <Parameter Name="FechaInicio" Mode="In" Type="String" />
+            <Parameter Name="FechaFin" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarActividadesTemporales" ReturnType="Collection(minasDBModel.ConsultarActividadesTemporales_Result)" />
           <FunctionImport Name="ConsultarDisponibilidadJob" ReturnType="Collection(minasDBModel.ConsultarDisponibilidadJob_Result)" />
           <FunctionImport Name="CrearTabla">
-          <Parameter Name="NombreTabla" Mode="In" Type="String" />
+            <Parameter Name="NombreTabla" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="EliminarDetalleActividad">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
@@ -377,10 +396,10 @@
             <Parameter Name="IdPK" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TablaExiste" ReturnType="Collection(minasDBModel.TablaExiste_Result)">
-          <Parameter Name="NombreTabla" Mode="In" Type="String" />
+            <Parameter Name="NombreTabla" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="TablasConsulta" ReturnType="Collection(String)">
-          <Parameter Name="NombreTabla" Mode="In" Type="String" />
+            <Parameter Name="NombreTabla" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="UpdateRegistro">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
@@ -392,30 +411,22 @@
             <Parameter Name="UpdateOn" Mode="In" Type="String" />
             <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="Conexion" EntityType="minasDBModel.Conexion" />
-          <AssociationSet Name="FK_FormularioConexion" Association="minasDBModel.FK_FormularioConexion">
-            <End Role="Formulario" EntitySet="Formulario" />
-            <End Role="Conexion" EntitySet="Conexion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_FormularioDetalle" Association="minasDBModel.FK_FormularioDetalle">
-            <End Role="Conexion" EntitySet="Conexion" />
-            <End Role="Detalle" EntitySet="Detalle" />
-          </AssociationSet>
-          <AssociationSet Name="FK_JobConexion" Association="minasDBModel.FK_JobConexion">
-            <End Role="Job" EntitySet="Job" />
-            <End Role="Conexion" EntitySet="Conexion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TipoConexion" Association="minasDBModel.FK_TipoConexion">
-            <End Role="TipoConexion" EntitySet="TipoConexion" />
-            <End Role="Conexion" EntitySet="Conexion" />
-          </AssociationSet>
-          <FunctionImport Name="ConsultarActividades">
-            <Parameter Name="Formulario" Mode="In" Type="String" />
-            <Parameter Name="FechaInicio" Mode="In" Type="String" />
-            <Parameter Name="FechaFin" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="ConsultarActividadesTemporales" ReturnType="Collection(minasDBModel.ConsultarActividadesTemporales_Result)" />
         </EntityContainer>
+        <EntityType Name="Conexion">
+          <Key>
+            <PropertyRef Name="idConexion" />
+          </Key>
+          <Property Name="idConexion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idFormulario" Type="Int32" Nullable="false" />
+          <Property Name="idJob" Type="Int32" Nullable="false" />
+          <Property Name="nombreConexion" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="false" />
+          <Property Name="periodoSincronizacion" Type="Int32" Nullable="false" />
+          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="fechaActualizacion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Formulario" Relationship="minasDBModel.FK_FormularioConexion" FromRole="Conexion" ToRole="Formulario" />
+          <NavigationProperty Name="Detalle" Relationship="minasDBModel.FK_FormularioDetalle" FromRole="Conexion" ToRole="Detalle" />
+          <NavigationProperty Name="Job" Relationship="minasDBModel.FK_JobConexion" FromRole="Conexion" ToRole="Job" />
+        </EntityType>
         <EntityType Name="Detalle">
           <Key>
             <PropertyRef Name="idDetalle" />
@@ -428,8 +439,8 @@
           <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="idTipoDetalle" Type="Int32" Nullable="false" />
           <Property Name="fechaCreacion" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="TipoDetalle" Relationship="minasDBModel.FK_TipoDetalle" FromRole="Detalle" ToRole="TipoDetalle" />
           <NavigationProperty Name="Conexion" Relationship="minasDBModel.FK_FormularioDetalle" FromRole="Detalle" ToRole="Conexion" />
+          <NavigationProperty Name="TipoDetalle" Relationship="minasDBModel.FK_TipoDetalle" FromRole="Detalle" ToRole="TipoDetalle" />
         </EntityType>
         <EntityType Name="Formulario">
           <Key>
@@ -471,14 +482,6 @@
           <Property Name="fechaActualizacion" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="TipoLocacion" Relationship="minasDBModel.FK_TipoLocacion" FromRole="Locacion" ToRole="TipoLocacion" />
         </EntityType>
-        <EntityType Name="TipoConexion">
-          <Key>
-            <PropertyRef Name="idTipoConexion" />
-          </Key>
-          <Property Name="idTipoConexion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nombreTipoConexion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Conexion" Relationship="minasDBModel.FK_TipoConexion" FromRole="TipoConexion" ToRole="Conexion" />
-        </EntityType>
         <EntityType Name="TipoDetalle">
           <Key>
             <PropertyRef Name="idTipoDetalle" />
@@ -506,6 +509,54 @@
           <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="apellido" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="physical_table">
+          <Key>
+            <PropertyRef Name="LocationName" />
+          </Key>
+          <Property Name="IdActividad" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NombreFormulario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LocationName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LocationGUID" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaCreacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="FechaActualizacion" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Usuario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_FormularioConexion">
+          <End Type="minasDBModel.Formulario" Role="Formulario" Multiplicity="1" />
+          <End Type="minasDBModel.Conexion" Role="Conexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Formulario">
+              <PropertyRef Name="idFormulario" />
+            </Principal>
+            <Dependent Role="Conexion">
+              <PropertyRef Name="idFormulario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FormularioDetalle">
+          <End Type="minasDBModel.Conexion" Role="Conexion" Multiplicity="1" />
+          <End Type="minasDBModel.Detalle" Role="Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Conexion">
+              <PropertyRef Name="idConexion" />
+            </Principal>
+            <Dependent Role="Detalle">
+              <PropertyRef Name="idConexion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobConexion">
+          <End Type="minasDBModel.Job" Role="Job" Multiplicity="1" />
+          <End Type="minasDBModel.Conexion" Role="Conexion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Job">
+              <PropertyRef Name="idJob" />
+            </Principal>
+            <Dependent Role="Conexion">
+              <PropertyRef Name="idJob" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_TipoDetalle">
           <End Type="minasDBModel.TipoDetalle" Role="TipoDetalle" Multiplicity="1" />
           <End Type="minasDBModel.Detalle" Role="Detalle" Multiplicity="*" />
@@ -550,14 +601,22 @@
         </ComplexType>
         <ComplexType Name="ConexionesDisponiblesSincronizarConsultar_Result">
           <Property Type="Int32" Name="idConexion" Nullable="false" />
-          <Property Type="Int32" Name="idTipoConexion" Nullable="false" />
           <Property Type="Int32" Name="idFormulario" Nullable="false" />
           <Property Type="Int32" Name="idJob" Nullable="false" />
           <Property Type="String" Name="nombreConexion" Nullable="false" MaxLength="120" />
           <Property Type="Int32" Name="periodoSincronizacion" Nullable="false" />
           <Property Type="String" Name="descripcion" Nullable="false" MaxLength="255" />
-          <Property Type="DateTime" Name="fechaActualizacion" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="fechaActualizacion" Nullable="true" Precision="23" />
           <Property Type="String" Name="GUIDFormulario" Nullable="false" MaxLength="40" />
+        </ComplexType>
+        <ComplexType Name="ConsultarActividadesTemporales_Result">
+          <Property Type="String" Name="IdActividad" Nullable="true" />
+          <Property Type="String" Name="NombreFormulario" Nullable="true" />
+          <Property Type="String" Name="LocationName" Nullable="false" />
+          <Property Type="String" Name="LocationGUID" Nullable="true" />
+          <Property Type="String" Name="FechaCreacion" Nullable="true" />
+          <Property Type="String" Name="FechaActualizacion" Nullable="true" />
+          <Property Type="String" Name="Usuario" Nullable="true" />
         </ComplexType>
         <ComplexType Name="ConsultarDisponibilidadJob_Result">
           <Property Type="Int32" Name="idJob" Nullable="false" />
@@ -576,86 +635,25 @@
           <Property Type="String" Name="table_derecha" Nullable="true" MaxLength="128" />
           <Property Type="String" Name="name" Nullable="true" MaxLength="128" />
         </ComplexType>
-        <EntityType Name="Conexion">
-          <Key>
-            <PropertyRef Name="idConexion" />
-          </Key>
-          <Property Name="idConexion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="idTipoConexion" Type="Int32" Nullable="false" />
-          <Property Name="idFormulario" Type="Int32" Nullable="false" />
-          <Property Name="idJob" Type="Int32" Nullable="false" />
-          <Property Name="nombreConexion" Type="String" Nullable="false" MaxLength="120" FixedLength="false" Unicode="false" />
-          <Property Name="periodoSincronizacion" Type="Int32" Nullable="false" />
-          <Property Name="descripcion" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="fechaActualizacion" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Formulario" Relationship="minasDBModel.FK_FormularioConexion" FromRole="Conexion" ToRole="Formulario" />
-          <NavigationProperty Name="Detalle" Relationship="minasDBModel.FK_FormularioDetalle" FromRole="Conexion" ToRole="Detalle" />
-          <NavigationProperty Name="Job" Relationship="minasDBModel.FK_JobConexion" FromRole="Conexion" ToRole="Job" />
-          <NavigationProperty Name="TipoConexion" Relationship="minasDBModel.FK_TipoConexion" FromRole="Conexion" ToRole="TipoConexion" />
-        </EntityType>
-        <Association Name="FK_FormularioConexion">
-          <End Type="minasDBModel.Formulario" Role="Formulario" Multiplicity="1" />
-          <End Type="minasDBModel.Conexion" Role="Conexion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Formulario">
-              <PropertyRef Name="idFormulario" />
-            </Principal>
-            <Dependent Role="Conexion">
-              <PropertyRef Name="idFormulario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_FormularioDetalle">
-          <End Type="minasDBModel.Conexion" Role="Conexion" Multiplicity="1" />
-          <End Type="minasDBModel.Detalle" Role="Detalle" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Conexion">
-              <PropertyRef Name="idConexion" />
-            </Principal>
-            <Dependent Role="Detalle">
-              <PropertyRef Name="idConexion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_JobConexion">
-          <End Type="minasDBModel.Job" Role="Job" Multiplicity="1" />
-          <End Type="minasDBModel.Conexion" Role="Conexion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Job">
-              <PropertyRef Name="idJob" />
-            </Principal>
-            <Dependent Role="Conexion">
-              <PropertyRef Name="idJob" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TipoConexion">
-          <End Type="minasDBModel.TipoConexion" Role="TipoConexion" Multiplicity="1" />
-          <End Type="minasDBModel.Conexion" Role="Conexion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TipoConexion">
-              <PropertyRef Name="idTipoConexion" />
-            </Principal>
-            <Dependent Role="Conexion">
-              <PropertyRef Name="idTipoConexion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <ComplexType Name="ConsultarActividadesTemporales_Result">
-          <Property Type="String" Name="IdActividad" Nullable="true" />
-          <Property Type="String" Name="NombreFormulario" Nullable="true" />
-          <Property Type="String" Name="LocationName" Nullable="false" />
-          <Property Type="String" Name="LocationGUID" Nullable="true" />
-          <Property Type="String" Name="FechaCreacion" Nullable="true" />
-          <Property Type="String" Name="FechaActualizacion" Nullable="true" />
-          <Property Type="String" Name="Usuario" Nullable="true" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="minasDBModelStoreContainer" CdmEntityContainer="minasDBEntities">
+          <EntitySetMapping Name="Conexion">
+            <EntityTypeMapping TypeName="minasDBModel.Conexion">
+              <MappingFragment StoreEntitySet="Conexion">
+                <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="periodoSincronizacion" ColumnName="periodoSincronizacion" />
+                <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
+                <ScalarProperty Name="idJob" ColumnName="idJob" />
+                <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
+                <ScalarProperty Name="idConexion" ColumnName="idConexion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Detalle">
             <EntityTypeMapping TypeName="minasDBModel.Detalle">
               <MappingFragment StoreEntitySet="Detalle">
@@ -710,14 +708,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TipoConexion">
-            <EntityTypeMapping TypeName="minasDBModel.TipoConexion">
-              <MappingFragment StoreEntitySet="TipoConexion">
-                <ScalarProperty Name="nombreTipoConexion" ColumnName="nombreTipoConexion" />
-                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TipoDetalle">
             <EntityTypeMapping TypeName="minasDBModel.TipoDetalle">
               <MappingFragment StoreEntitySet="TipoDetalle">
@@ -743,6 +733,19 @@
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="GUIDUsuario" ColumnName="GUIDUsuario" />
                 <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="physical_table">
+            <EntityTypeMapping TypeName="minasDBModel.physical_table">
+              <MappingFragment StoreEntitySet="physical_table">
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="LocationGUID" ColumnName="LocationGUID" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="NombreFormulario" ColumnName="NombreFormulario" />
+                <ScalarProperty Name="IdActividad" ColumnName="IdActividad" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -782,7 +785,6 @@
             <ResultMapping>
               <ComplexTypeMapping TypeName="minasDBModel.ConexionesDisponiblesSincronizarConsultar_Result">
                 <ScalarProperty Name="idConexion" ColumnName="idConexion" />
-                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
                 <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
                 <ScalarProperty Name="idJob" ColumnName="idJob" />
                 <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
@@ -790,6 +792,20 @@
                 <ScalarProperty Name="descripcion" ColumnName="descripcion" />
                 <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
                 <ScalarProperty Name="GUIDFormulario" ColumnName="GUIDFormulario" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ConsultarActividades" FunctionName="minasDBModel.Store.ConsultarActividades" />
+          <FunctionImportMapping FunctionImportName="ConsultarActividadesTemporales" FunctionName="minasDBModel.Store.ConsultarActividadesTemporales">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="minasDBModel.ConsultarActividadesTemporales_Result">
+                <ScalarProperty Name="IdActividad" ColumnName="IdActividad" />
+                <ScalarProperty Name="NombreFormulario" ColumnName="NombreFormulario" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationGUID" ColumnName="LocationGUID" />
+                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -825,34 +841,6 @@
           <FunctionImportMapping FunctionImportName="TablasConsulta" FunctionName="minasDBModel.Store.TablasConsulta" />
           <FunctionImportMapping FunctionImportName="UpdateRegistro" FunctionName="minasDBModel.Store.UpdateRegistro" />
           <FunctionImportMapping FunctionImportName="ValidarRegistroActualizar" FunctionName="minasDBModel.Store.ValidarRegistroActualizar" />
-          <EntitySetMapping Name="Conexion">
-            <EntityTypeMapping TypeName="minasDBModel.Conexion">
-              <MappingFragment StoreEntitySet="Conexion">
-                <ScalarProperty Name="fechaActualizacion" ColumnName="fechaActualizacion" />
-                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
-                <ScalarProperty Name="periodoSincronizacion" ColumnName="periodoSincronizacion" />
-                <ScalarProperty Name="nombreConexion" ColumnName="nombreConexion" />
-                <ScalarProperty Name="idJob" ColumnName="idJob" />
-                <ScalarProperty Name="idFormulario" ColumnName="idFormulario" />
-                <ScalarProperty Name="idTipoConexion" ColumnName="idTipoConexion" />
-                <ScalarProperty Name="idConexion" ColumnName="idConexion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="ConsultarActividades" FunctionName="minasDBModel.Store.ConsultarActividades" />
-          <FunctionImportMapping FunctionImportName="ConsultarActividadesTemporales" FunctionName="minasDBModel.Store.ConsultarActividadesTemporales">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="minasDBModel.ConsultarActividadesTemporales_Result">
-                <ScalarProperty Name="IdActividad" ColumnName="IdActividad" />
-                <ScalarProperty Name="NombreFormulario" ColumnName="NombreFormulario" />
-                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
-                <ScalarProperty Name="LocationGUID" ColumnName="LocationGUID" />
-                <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
-                <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
-                <ScalarProperty Name="Usuario" ColumnName="Usuario" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

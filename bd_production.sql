@@ -1,15 +1,15 @@
 USE master;
 
 --Delete the minasDB database if it exists.  
-IF EXISTS(SELECT * from sys.databases WHERE name='seguimientoMinas')  
+IF EXISTS(SELECT * from sys.databases WHERE name='BDMinas')  
 BEGIN  
-    DROP DATABASE seguimientoMinas; 
+    DROP DATABASE BDMinas; 
 END  
 
 --Create a new database called seguimientoMinas.  
-CREATE DATABASE seguimientoMinas; 
+CREATE DATABASE BDMinas; 
 
-USE seguimientoMinas; 
+USE BDMinas; 
 
 IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'Formulario')
 	BEGIN
@@ -38,19 +38,19 @@ IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'TipoDetalle')
 	insert into TipoDetalle(nombreTipoDetalle) VALUES ('Video');
 
 	
-IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'TipoConexion')
-	BEGIN
-		DROP TABLE TipoConexion;
-	END
+--IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'TipoConexion')
+--	BEGIN
+--		DROP TABLE TipoConexion;
+--	END
 
-	CREATE TABLE dbo.TipoConexion  
-		   (idTipoConexion int identity(1,1) NOT NULL,
-			nombreTipoConexion varchar(20) unique Not NULL,
-			CONSTRAINT PK_TipoConexion PRIMARY KEY (idTipoConexion))
+--	CREATE TABLE dbo.TipoConexion  
+--		   (idTipoConexion int identity(1,1) NOT NULL,
+--			nombreTipoConexion varchar(20) unique Not NULL,
+--			CONSTRAINT PK_TipoConexion PRIMARY KEY (idTipoConexion))
 
-	insert into TipoConexion(nombreTipoConexion) VALUES ('Formulario');
-	insert into TipoConexion(nombreTipoConexion) VALUES ('Imágen');
-	insert into TipoConexion(nombreTipoConexion) VALUES ('Video');
+--	insert into TipoConexion(nombreTipoConexion) VALUES ('Formulario');
+--	insert into TipoConexion(nombreTipoConexion) VALUES ('Imágen');
+--	insert into TipoConexion(nombreTipoConexion) VALUES ('Video');
 
 
 IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'Job')
@@ -76,7 +76,7 @@ IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'Conexion')
 
 	CREATE TABLE dbo.Conexion  
 		   (idConexion int identity(1,1) NOT NULL,
-			idTipoConexion int Not NULL,
+			--idTipoConexion int Not NULL,
 			idFormulario int unique Not Null,
 			idJob int NOT NULL,
 			nombreConexion varchar(120) unique NOT NULL,
@@ -84,7 +84,7 @@ IF EXISTS(SELECT * FROM SYSOBJECTS WHERE XTYPE='U' AND NAME = 'Conexion')
 			descripcion varchar(255) NOT NULL,
 			fechaActualizacion datetime,
 			CONSTRAINT PK_Conexion PRIMARY KEY (idConexion),
-			CONSTRAINT FK_TipoConexion FOREIGN KEY (idTipoConexion) REFERENCES TipoConexion(idTipoConexion),
+			--CONSTRAINT FK_TipoConexion FOREIGN KEY (idTipoConexion) REFERENCES TipoConexion(idTipoConexion),
 			CONSTRAINT DF_FechaActualizacion DEFAULT GETDATE() FOR fechaActualizacion,
 			CONSTRAINT FK_FormularioConexion FOREIGN KEY (idFormulario) REFERENCES Formulario(idFormulario),
 			CONSTRAINT FK_JobConexion FOREIGN KEY (idJob) REFERENCES Job(idJob))
