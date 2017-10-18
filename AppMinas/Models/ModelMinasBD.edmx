@@ -224,6 +224,10 @@ advertencia 6002: La tabla o vista 'BDMinasDesarrollo.dbo.physical_table' no tie
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="IdActividad" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="FechaLocalConsultar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetLocalDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="datetime">
+          <Parameter Name="TimezoneDiffInHour" Type="float" Mode="In" />
+        </Function>
         <Function Name="Prueba" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NombreTabla" Type="varchar" Mode="In" />
           <Parameter Name="NombreColumna" Type="varchar" Mode="In" />
@@ -384,6 +388,7 @@ advertencia 6002: La tabla o vista 'BDMinasDesarrollo.dbo.physical_table' no tie
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="IdActividad" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="FechaLocalConsultar" ReturnType="Collection(DateTime)" />
           <FunctionImport Name="Prueba">
             <Parameter Name="NombreTabla" Mode="In" Type="String" />
             <Parameter Name="NombreColumna" Mode="In" Type="String" />
@@ -819,6 +824,7 @@ advertencia 6002: La tabla o vista 'BDMinasDesarrollo.dbo.physical_table' no tie
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="CrearTabla" FunctionName="minasDBModel.Store.CrearTabla" />
           <FunctionImportMapping FunctionImportName="EliminarDetalleActividad" FunctionName="minasDBModel.Store.EliminarDetalleActividad" />
+          <FunctionImportMapping FunctionImportName="FechaLocalConsultar" FunctionName="minasDBModel.Store.FechaLocalConsultar" />
           <FunctionImportMapping FunctionImportName="Prueba" FunctionName="minasDBModel.Store.Prueba" />
           <FunctionImportMapping FunctionImportName="RegistroExiste" FunctionName="minasDBModel.Store.RegistroExiste" />
           <FunctionImportMapping FunctionImportName="TablaExiste" FunctionName="minasDBModel.Store.TablaExiste">

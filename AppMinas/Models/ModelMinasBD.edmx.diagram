@@ -7,8 +7,8 @@
       <Diagram DiagramId="2fcb0aab6f4e427e8567b68c9904c610" Name="Diagram1">
         <EntityTypeShape EntityType="minasDBModel.Conexion" Width="1.5" PointX="3" PointY="1" />
         <EntityTypeShape EntityType="minasDBModel.Detalle" Width="1.5" PointX="5.25" PointY="1" />
-        <EntityTypeShape EntityType="minasDBModel.Formulario" Width="1.5" PointX="0.75" PointY="1.5" />
-        <EntityTypeShape EntityType="minasDBModel.Job" Width="1.5" PointX="0.75" PointY="5.625" />
+        <EntityTypeShape EntityType="minasDBModel.Formulario" Width="1.5" PointX="0.75" PointY="5.5" />
+        <EntityTypeShape EntityType="minasDBModel.Job" Width="1.5" PointX="0.75" PointY="1.625" />
         <EntityTypeShape EntityType="minasDBModel.Locacion" Width="1.5" PointX="8" PointY="5" />
         <EntityTypeShape EntityType="minasDBModel.TipoDetalle" Width="1.5" PointX="3" PointY="5.625" />
         <EntityTypeShape EntityType="minasDBModel.TipoLocacion" Width="1.5" PointX="5.75" PointY="6.25" />

@@ -235,6 +235,11 @@ namespace AppMinas.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("EliminarDetalleActividad", nombreTablaParameter, idActividadParameter);
         }
     
+        public virtual ObjectResult<Nullable<System.DateTime>> FechaLocalConsultar()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("FechaLocalConsultar");
+        }
+    
         public virtual int Prueba(string nombreTabla, string nombreColumna, string tipoColumna, string obligatorio)
         {
             var nombreTablaParameter = nombreTabla != null ?

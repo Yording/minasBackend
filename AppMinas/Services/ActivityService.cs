@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AppMinas.Listas;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace AppMinas.Services
 {
@@ -75,6 +81,24 @@ namespace AppMinas.Services
                 }
                 throw;
             }
+        }
+
+        public string getLocalDate()
+        {
+            List<DateTime?> Fecha = new List<DateTime?>();
+          try
+            {
+                using (Models.minasDBEntities objMINASBDEntities = new Models.minasDBEntities())
+                {
+                    Fecha = objMINASBDEntities.FechaLocalConsultar().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            return Convert.ToString(Fecha[0].Value);
+
         }
     }
 }
